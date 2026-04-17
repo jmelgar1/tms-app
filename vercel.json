@@ -3,10 +3,6 @@
     {
       "source": "/api/:path*",
       "destination": "http://209.236.115.178:6540/api/:path*"
-    },
-    {
-      "source": "/bluemap/:path*",
-      "destination": "http://209.236.115.178:26625/:path*"
     }
   ]
 }

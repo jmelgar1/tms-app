@@ -2,6 +2,7 @@ import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ServerStatusService } from '../../services/server-status.service';
 import { ServerStatus, PlayerInfo } from '../../models/server-status.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ import { ServerStatus, PlayerInfo } from '../../models/server-status.model';
 })
 export class Home implements OnInit, OnDestroy {
   private statusService = inject(ServerStatusService);
+  bluemapUrl = environment.bluemapUrl;
   private refreshInterval: ReturnType<typeof setInterval> | null = null;
 
   status = signal<ServerStatus | null>(null);
