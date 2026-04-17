@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(shopt -s dotglob)",
+      "Bash(npx @angular/cli version)",
+      "Bash(npx @angular/cli new tms-app --directory . --style scss --routing --skip-git --skip-tests)",
+      "Bash(npx ng *)",
+      "Bash(curl -s http://localhost:4200)",
+      "WebFetch(domain:api.mcsrvstat.us)",
+      "Bash(curl *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(python -m json.tool)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('players',{}\\), indent=2\\)\\)\")"
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+.chart-section {
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.chart-title {
+  color: #fff;
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.bar-label {
+  width: 160px;
+  flex-shrink: 0;
+  color: #ccc;
+  font-size: 0.85rem;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-track {
+  flex: 1;
+  height: 20px;
+  background: #1a1a1a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease-out;
+  min-width: 2px;
+}
+
+.bar-value {
+  width: 100px;
+  flex-shrink: 0;
+  color: #aaa;
+  font-size: 0.8rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.chart-bars-wrapper {
+  position: relative;
+}
+
+.scroll-indicator {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+  color: #aaa;
+  font-size: 1.25rem;
+  line-height: 1;
+
+  &.top {
+    top: -2px;
+  }
+
+  &.bottom {
+    bottom: -2px;
+  }
+}
+
+.chart-bars.scrollable {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+
+    &:hover {
+      background: #666;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .bar-label {
+    width: 100px;
+    font-size: 0.8rem;
+  }
+
+  .bar-value {
+    width: 80px;
+    font-size: 0.75rem;
+  }
+}

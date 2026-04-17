@@ -1,0 +1,30 @@
+<div class="chart-section">
+  <h3 class="chart-title">{{ title() }}</h3>
+  <div class="chart-bars-wrapper">
+    @if (scrollable() && canScrollUp()) {
+      <div class="scroll-indicator top">&#x2303;</div>
+    }
+    <div
+      class="chart-bars"
+      [class.scrollable]="scrollable()"
+      (scroll)="onScroll($event)"
+    >
+      @for (stat of stats(); track stat.label) {
+        <div class="bar-row">
+          <span class="bar-label">{{ stat.label }}</span>
+          <div class="bar-track">
+            <div
+              class="bar-fill"
+              [style.width.%]="stat.percentage"
+              [style.background-color]="barColor()"
+            ></div>
+          </div>
+          <span class="bar-value">{{ stat.displayValue }}</span>
+        </div>
+      }
+    </div>
+    @if (scrollable() && canScrollDown()) {
+      <div class="scroll-indicator bottom">&#x2304;</div>
+    }
+  </div>
+</div>

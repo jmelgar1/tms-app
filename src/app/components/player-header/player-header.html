@@ -1,0 +1,28 @@
+<div class="player-header-card">
+  @if (skinLoaded()) {
+    <img
+      [src]="bodyUrl()"
+      [alt]="name() + ' skin'"
+      class="player-skin"
+      (error)="onSkinError()"
+    />
+  }
+  <div class="player-info">
+    <h2 class="player-name">{{ name() }}</h2>
+    <span class="badge" [class.online]="online()" [class.offline]="!online()">
+      {{ online() ? 'Online' : 'Offline' }}
+    </span>
+    @if (firstSeen()) {
+      <div class="player-date">
+        <span class="date-label">First Seen</span>
+        <span class="date-value">{{ firstSeen() | date:'mediumDate' }}</span>
+      </div>
+    }
+    @if (lastSeen()) {
+      <div class="player-date">
+        <span class="date-label">Last Seen</span>
+        <span class="date-value">{{ lastSeen() | date:'mediumDate' }}</span>
+      </div>
+    }
+  </div>
+</div>

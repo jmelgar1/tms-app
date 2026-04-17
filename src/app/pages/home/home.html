@@ -1,0 +1,71 @@
+<div class="home">
+  <div class="title-images">
+    <img src="/assets/The-Server.png" alt="The Server" class="title-img" />
+    <img src="/assets/On-Minecraft.png" alt="On Minecraft" class="title-img" />
+  </div>
+
+  <section class="status-section">
+    <div class="status-card">
+      <div class="card-heading">
+        <span class="server-name">The Server On Minecraft</span>
+        <span class="server-region">Virginia, United States</span>
+      </div>
+
+      @if (loading()) {
+        <p class="loading">Loading server status...</p>
+      } @else if (error()) {
+        <p class="error">{{ error() }}</p>
+      } @else if (status(); as s) {
+        <div class="status-header">
+          @if (s.icon) {
+            <img [src]="s.icon" alt="Server icon" class="server-icon" />
+          }
+          <div class="status-details">
+            <div class="status-top-row">
+              <div class="status-bottom-row">
+                <span class="badge" [class.online]="s.online" [class.offline]="!s.online">
+                  {{ s.online ? 'Online' : 'Offline' }}
+                </span>
+                @if (s.version) {
+                  <span class="version">{{ s.version }}</span>
+                }
+                @if (s.software) {
+                  <span class="software">{{ s.software }}</span>
+                }
+              </div>
+              @if (s.players) {
+                <span class="player-count">{{ s.players.online }} / {{ s.players.max }}</span>
+              }
+            </div>
+            @if (s.motd && s.motd.html.length > 0) {
+              <div class="motd" [innerHTML]="s.motd.html.join('<br>')"></div>
+            }
+          </div>
+        </div>
+
+        @if (s.players) {
+          <div class="players">
+            @if (s.players.list && s.players.list.length > 0) {
+              <ul class="player-list">
+                @for (player of s.players.list; track player.uuid) {
+                  <li [title]="playerName(player)">
+                    <img [src]="playerAvatarUrl(player)" [alt]="playerName(player)" class="player-avatar" />
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="no-players">No Online Players</p>
+            }
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <nav class="nav-buttons">
+    <a routerLink="/map" class="nav-btn">Map</a>
+    <a routerLink="/stats" class="nav-btn">Stats</a>
+  </nav>
+
+  <a routerLink="/donate" class="donate-btn">Donate</a>
+</div>

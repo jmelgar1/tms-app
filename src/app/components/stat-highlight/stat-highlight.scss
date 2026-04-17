@@ -1,0 +1,41 @@
+.highlights {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.highlight-card {
+  flex: 1;
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.highlight-label {
+  color: #aaa;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.highlight-value {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .highlights {
+    flex-direction: column;
+  }
+
+  .highlight-value {
+    font-size: 1.25rem;
+  }
+}

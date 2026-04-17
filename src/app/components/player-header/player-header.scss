@@ -1,0 +1,82 @@
+.player-header-card {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.player-skin {
+  width: 100px;
+  height: auto;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.player-name {
+  color: #fff;
+  font-size: 1.75rem;
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: fit-content;
+
+  &.online {
+    background: rgba(39, 174, 96, 0.2);
+    color: #27ae60;
+  }
+
+  &.offline {
+    background: rgba(192, 57, 43, 0.2);
+    color: #c0392b;
+  }
+}
+
+.player-date {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.date-label {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.date-value {
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  .player-header-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .player-info {
+    align-items: center;
+  }
+
+  .player-date {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+  }
+}

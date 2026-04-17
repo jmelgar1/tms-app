@@ -1,0 +1,98 @@
+<div class="stats">
+  @if (viewingPlayer()) {
+    <button class="back-btn" (click)="backToServer()">&larr; Back to Server Stats</button>
+  } @else {
+    <a routerLink="/" class="back-btn">&larr; Back to Home</a>
+    <h1>Server Statistics</h1>
+  }
+
+  <form class="search-form" (ngSubmit)="search()">
+    <input
+      type="text"
+      [(ngModel)]="searchName"
+      name="searchName"
+      placeholder="Search player stats..."
+      autocomplete="off"
+    />
+    <button type="submit" [disabled]="loading()">Search</button>
+  </form>
+
+  @if (error(); as e) {
+    <p class="error">{{ e }}</p>
+  }
+
+  @if (viewingPlayer()) {
+    <!-- Player Stats View -->
+    @if (playerInfo(); as info) {
+      <app-player-header
+        [uuid]="info.uuid"
+        [name]="info.name"
+        [online]="info.online"
+        [firstSeen]="info.firstSeen"
+        [lastSeen]="info.lastSeen"
+      />
+
+      @if (headlines(); as h) {
+        <app-stat-highlight
+          [playtime]="h.playtime"
+          [deaths]="h.deaths"
+        />
+      }
+
+      @for (group of chartGroups(); track group.title) {
+        <app-stat-bar-chart
+          [title]="group.title"
+          [stats]="group.stats"
+          [barColor]="group.color"
+          [scrollable]="group.scrollable ?? false"
+        />
+      }
+    }
+  } @else {
+    <!-- Server Stats View -->
+    @if (serverLoading()) {
+      <p class="loading">Loading server stats...</p>
+    } @else if (serverError(); as e) {
+      <p class="error">{{ e }}</p>
+    } @else if (serverStats()) {
+      <div class="server-header">
+        <h2>Total Players: {{ serverPlayerCount() }}</h2>
+      </div>
+
+      @if (playerList().length > 0) {
+        <div class="player-list">
+          @for (entry of playerList(); track entry.uuid) {
+            <button class="player-card" (click)="selectPlayer(entry.name)" [title]="entry.name">
+              <img
+                [src]="avatarUrl(entry.uuid)"
+                [alt]="entry.name"
+                class="player-avatar"
+              />
+              <span class="player-name">{{ entry.name }}</span>
+            </button>
+          }
+        </div>
+      }
+
+      @if (headlines(); as h) {
+        <app-stat-highlight
+          [playtime]="h.playtime"
+          [deaths]="h.deaths"
+        />
+      }
+
+      @for (group of chartGroups(); track group.title) {
+        <app-stat-bar-chart
+          [title]="group.title"
+          [stats]="group.stats"
+          [barColor]="group.color"
+          [scrollable]="group.scrollable ?? false"
+        />
+      }
+    }
+  }
+</div>
+
+@if (loading()) {
+  <div class="loading-toast">Loading stats...</div>
+}
