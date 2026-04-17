@@ -8,5 +8,6 @@ const content = `export const environment = {
 };
 `;
 
+fs.writeFileSync('src/environments/environment.ts', content);
 fs.writeFileSync('src/environments/environment.prod.ts', content);
-console.log('Generated environment.prod.ts');
+console.log('Generated environment.ts and environment.prod.ts');
