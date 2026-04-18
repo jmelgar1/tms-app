@@ -44,8 +44,8 @@ export class StatComparisonModal implements OnInit, OnDestroy {
 
   viewedRank = computed(() => {
     const entries = this.leaderboard();
-    const idx = entries.findIndex(e => e.uuid === this.viewedUuid());
-    return idx >= 0 ? idx + 1 : null;
+    const entry = entries.find(e => e.uuid === this.viewedUuid());
+    return entry ? entry.rank : null;
   });
 
   ngOnInit(): void {
