@@ -1,0 +1,163 @@
+.gallery-section {
+  margin-bottom: 2rem;
+}
+
+.gallery-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.gallery-title-img {
+  height: 2rem;
+  display: block;
+}
+
+.upload-btn {
+  padding: 0.4rem 1rem;
+  background: rgba(39, 174, 96, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(46, 204, 113, 0.9);
+  }
+}
+
+// Wrapper with fade overlays
+
+.gallery-wrap {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.85), transparent);
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.85), transparent);
+  }
+
+  &.fade-left::before {
+    opacity: 1;
+  }
+
+  &.fade-right::after {
+    opacity: 1;
+  }
+}
+
+// Viewport & track
+
+.gallery-viewport {
+  overflow: hidden;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 0.75rem;
+  transition: transform 0.4s ease;
+}
+
+// Cards
+
+.screenshot-card {
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.screenshot-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.screenshot-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 0.6rem 0.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+}
+
+.screenshot-player {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.screenshot-avatar {
+  width: 12px;
+  height: 12px;
+  image-rendering: pixelated;
+  border-radius: 2px;
+}
+
+.screenshot-name {
+  color: #ccc;
+  font-size: 0.7rem;
+}
+
+.screenshot-caption {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin: 0 0 0.375rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Footer
+
+.gallery-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.gallery-counter {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+}
+
+// Status
+
+.status-text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem 0;
+
+  &.error {
+    color: #e74c3c;
+  }
+}

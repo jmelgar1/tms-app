@@ -1,0 +1,50 @@
+<section class="gallery-section">
+  <div class="gallery-header">
+    <img src="/assets/SEE_THE_SERVER.png" alt="See the Server" class="gallery-title-img" />
+  </div>
+
+  @if (loading()) {
+    <p class="status-text">Loading screenshots...</p>
+  } @else if (error()) {
+    <p class="status-text error">Failed to load screenshots.</p>
+  } @else if (screenshots().length === 0) {
+    <p class="status-text">No screenshots yet. Be the first to upload!</p>
+  } @else {
+    <div class="gallery-wrap" [class.fade-left]="canScrollUp()" [class.fade-right]="canScrollDown()">
+      <div class="gallery-viewport" (wheel)="onWheel($event)">
+        <div class="gallery-track" [style.transform]="trackTransform()">
+          @for (screenshot of screenshots(); track screenshot.id) {
+            <div class="screenshot-card" #card>
+              <img
+                [src]="imageUrl(screenshot.id)"
+                [alt]="screenshot.caption || 'Screenshot by ' + screenshot.playerName"
+                class="screenshot-img"
+                loading="lazy"
+              />
+              <div class="screenshot-info">
+                @if (screenshot.caption) {
+                  <p class="screenshot-caption">{{ screenshot.caption }}</p>
+                }
+                <div class="screenshot-player">
+                  <img
+                    [src]="avatarUrl(screenshot.playerUuid)"
+                    [alt]="screenshot.playerName"
+                    class="screenshot-avatar"
+                  />
+                  <span class="screenshot-name">{{ screenshot.playerName }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-footer">
+      <div class="gallery-counter">
+        {{ currentIndex() + 1 }} / {{ screenshots().length }}
+      </div>
+      <button class="upload-btn" (click)="onUploadClick()">Upload</button>
+    </div>
+  }
+</section>

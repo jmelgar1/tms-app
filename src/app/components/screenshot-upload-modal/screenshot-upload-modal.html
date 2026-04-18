@@ -1,0 +1,116 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3 class="modal-title">Upload Screenshot</h3>
+      <button class="close-btn" (click)="close()">&times;</button>
+    </div>
+
+    <!-- Step: Enter Username -->
+    @if (step() === 'username') {
+      <div class="step-content">
+        <p class="step-description">
+          Enter your Minecraft username. You must be online on the server to verify.
+        </p>
+        <form (ngSubmit)="submitUsername()" class="username-form">
+          <input
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            placeholder="Minecraft username"
+            autocomplete="off"
+            [disabled]="submitting()"
+          />
+          <button type="submit" [disabled]="!username().trim() || submitting()">
+            {{ submitting() ? 'Sending...' : 'Send Verification' }}
+          </button>
+        </form>
+        @if (errorMessage()) {
+          <p class="error-text">{{ errorMessage() }}</p>
+        }
+      </div>
+    }
+
+    <!-- Step: Waiting for Verification -->
+    @if (step() === 'waiting') {
+      <div class="step-content waiting-step">
+        <div class="pulse-dot"></div>
+        <p class="step-description">
+          A verification message has been sent to <strong>{{ username() }}</strong> in Minecraft.
+        </p>
+        <p class="step-hint">Click the link in chat to continue.</p>
+        <button class="cancel-btn" (click)="close()">Cancel</button>
+      </div>
+    }
+
+    <!-- Step: Upload File -->
+    @if (step() === 'upload') {
+      <div class="step-content">
+        <p class="step-description verified-text">Verified! Select a screenshot to upload.</p>
+
+        <div
+          class="drop-zone"
+          [class.has-file]="selectedFile()"
+          (dragover)="onDragOver($event)"
+          (drop)="onDrop($event)"
+        >
+          @if (previewUrl()) {
+            <img [src]="previewUrl()" alt="Preview" class="preview-img" />
+          } @else {
+            <p class="drop-text">Drag & drop an image here or click to select</p>
+            <p class="drop-hint">PNG or JPEG, max 5 MB</p>
+          }
+          <input
+            type="file"
+            accept="image/png,image/jpeg"
+            (change)="onFileSelected($event)"
+            class="file-input"
+          />
+        </div>
+
+        @if (selectedFile()) {
+          <div class="file-info">
+            <span class="file-name">{{ selectedFile()!.name }}</span>
+            <span class="file-size">{{ (selectedFile()!.size / 1024 / 1024).toFixed(1) }} MB</span>
+          </div>
+        }
+
+        <input
+          type="text"
+          [(ngModel)]="caption"
+          name="caption"
+          placeholder="Add a caption (optional)"
+          class="caption-input"
+          maxlength="200"
+        />
+
+        <button
+          class="upload-submit-btn"
+          [disabled]="!selectedFile() || uploading()"
+          (click)="submitUpload()"
+        >
+          {{ uploading() ? 'Uploading...' : 'Upload Screenshot' }}
+        </button>
+
+        @if (errorMessage()) {
+          <p class="error-text">{{ errorMessage() }}</p>
+        }
+      </div>
+    }
+
+    <!-- Step: Success -->
+    @if (step() === 'success') {
+      <div class="step-content success-step">
+        <p class="success-text">Screenshot uploaded successfully!</p>
+        <button class="done-btn" (click)="close()">Done</button>
+      </div>
+    }
+
+    <!-- Step: Error -->
+    @if (step() === 'error') {
+      <div class="step-content">
+        <p class="error-text">{{ errorMessage() }}</p>
+        <button class="done-btn" (click)="close()">Close</button>
+      </div>
+    }
+  </div>
+</div>

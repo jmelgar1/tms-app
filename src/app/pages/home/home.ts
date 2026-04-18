@@ -2,11 +2,13 @@ import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ServerStatusService } from '../../services/server-status.service';
 import { ServerStatus, PlayerInfo } from '../../models/server-status.model';
+import { ScreenshotGallery } from '../../components/screenshot-gallery/screenshot-gallery';
+import { ScreenshotUploadModal } from '../../components/screenshot-upload-modal/screenshot-upload-modal';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [RouterLink, ScreenshotGallery, ScreenshotUploadModal],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -18,6 +20,8 @@ export class Home implements OnInit, OnDestroy {
   status = signal<ServerStatus | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
+  showUploadModal = signal(false);
+  galleryRefresh = signal(0);
 
   ngOnInit(): void {
     const cached = this.statusService.cachedStatus;
@@ -41,6 +45,18 @@ export class Home implements OnInit, OnDestroy {
 
   playerAvatarUrl(player: PlayerInfo): string {
     return `https://mc-heads.net/avatar/${player.uuid}/48`;
+  }
+
+  openUploadModal(): void {
+    this.showUploadModal.set(true);
+  }
+
+  onUploadModalClosed(): void {
+    this.showUploadModal.set(false);
+  }
+
+  onScreenshotUploaded(): void {
+    this.galleryRefresh.update((v) => v + 1);
   }
 
   private fetchStatus(): void {
