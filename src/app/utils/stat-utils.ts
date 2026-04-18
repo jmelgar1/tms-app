@@ -1,4 +1,4 @@
-import { StatEntry, DisplayStat, StatChartGroup } from '../models/player-stats.model';
+import { StatEntry, DisplayStat, StatChartGroup, RankEntry } from '../models/player-stats.model';
 
 const MOVEMENT_STATS = new Set([
   'walk_one_cm', 'sprint_one_cm', 'crouch_one_cm', 'climb_one_cm',
@@ -38,13 +38,8 @@ const numberFormatter = new Intl.NumberFormat('en-US');
 
 export function ticksToDaysHours(ticks: number): string {
   const totalSeconds = Math.floor(ticks / 20);
-  const totalHours = Math.floor(totalSeconds / 3600);
-  const days = Math.floor(totalHours / 24);
-  const hours = totalHours % 24;
-  if (days === 0 && hours === 0) return '0 hours';
-  if (days === 0) return `${hours} hours`;
-  if (hours === 0) return `${days} days`;
-  return `${days} days and ${hours} hours`;
+  const days = totalSeconds / 86400;
+  return `${days.toFixed(2)} days`;
 }
 
 export function cmToDistance(cm: number): string {
@@ -71,17 +66,31 @@ function statKey(stat: string): string {
   return stripPrefix(stat);
 }
 
+export function formatStatValue(statKey: string, value: number): string {
+  const key = statKey.replace(/^minecraft:/, '');
+  if (key.endsWith('_one_cm')) return cmToDistance(value);
+  if (DAMAGE_STATS.has(key)) return `${formatNumber(Math.round(value / 2))} hearts`;
+  if (TIME_STATS.has(key)) return ticksToDaysHours(value);
+  return formatNumber(value);
+}
+
 function toDisplayStats(
   entries: { stat: string; value: number }[],
   formatter: (value: number, stat: string) => string,
+  category: string,
+  rankEntries?: RankEntry[],
 ): DisplayStat[] {
   if (entries.length === 0) return [];
   const max = Math.max(...entries.map(e => e.value));
+  const rankMap = new Map(rankEntries?.map(r => [r.stat, r.rank]));
   return entries.map(e => ({
     label: formatStatName(e.stat),
     rawValue: e.value,
     displayValue: formatter(e.value, e.stat),
     percentage: max > 0 ? (e.value / max) * 100 : 0,
+    statKey: e.stat,
+    category: category,
+    rank: rankMap.get(e.stat),
   }));
 }
 
@@ -104,6 +113,7 @@ export function extractHeadlineStats(
 
 export function buildChartGroups(
   stats: Record<string, StatEntry[]>,
+  ranks?: Record<string, RankEntry[]>,
 ): StatChartGroup[] {
   const groups: StatChartGroup[] = [];
 
@@ -128,7 +138,7 @@ export function buildChartGroups(
   if (movementEntries.length > 0) {
     groups.push({
       title: 'Movement',
-      stats: toDisplayStats(movementEntries, v => cmToDistance(v)),
+      stats: toDisplayStats(movementEntries, v => cmToDistance(v), 'minecraft:custom', ranks?.['minecraft:custom']),
       color: CHART_COLORS.movement,
     });
   }
@@ -141,7 +151,7 @@ export function buildChartGroups(
           return `${formatNumber(Math.round(v / 2))} hearts`;
         }
         return formatNumber(v);
-      }),
+      }, 'minecraft:custom', ranks?.['minecraft:custom']),
       color: CHART_COLORS.combat,
     });
   }
@@ -154,7 +164,7 @@ export function buildChartGroups(
           return ticksToDaysHours(v);
         }
         return formatNumber(v);
-      }),
+      }, 'minecraft:custom', ranks?.['minecraft:custom']),
       color: CHART_COLORS.interaction,
     });
   }
@@ -177,7 +187,7 @@ export function buildChartGroups(
     if (entries.length > 0) {
       groups.push({
         title: cat.title,
-        stats: toDisplayStats(entries, v => formatNumber(v)),
+        stats: toDisplayStats(entries, v => formatNumber(v), cat.key, ranks?.[cat.key]),
         color: cat.color,
         scrollable: cat.scrollable,
       });
@@ -198,7 +208,7 @@ export function buildChartGroups(
   if (deathEntries.length > 0) {
     groups.push({
       title: 'Death Causes',
-      stats: toDisplayStats(deathEntries, v => formatNumber(v)),
+      stats: toDisplayStats(deathEntries, v => formatNumber(v), 'minecraft:killed_by', ranks?.['minecraft:killed_by']),
       color: CHART_COLORS.killedBy,
     });
   }

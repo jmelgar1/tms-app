@@ -19,6 +19,14 @@
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.4rem;
+  cursor: pointer;
+  padding: 0.15rem 0.25rem;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
 }
 
 .bar-label {
@@ -54,6 +62,17 @@
   font-size: 0.8rem;
   text-align: left;
   white-space: nowrap;
+}
+
+.bar-rank {
+  flex-shrink: 0;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0.85;
 }
 
 .chart-bars-wrapper {

@@ -10,7 +10,7 @@
       (scroll)="onScroll($event)"
     >
       @for (stat of stats(); track stat.label) {
-        <div class="bar-row">
+        <div class="bar-row" (click)="statClicked.emit(stat)">
           <span class="bar-label">{{ stat.label }}</span>
           <div class="bar-track">
             <div
@@ -20,6 +20,9 @@
             ></div>
           </div>
           <span class="bar-value">{{ stat.displayValue }}</span>
+          @if (stat.rank) {
+            <span class="bar-rank" [style.background-color]="barColor()">#{{ stat.rank }}</span>
+          }
         </div>
       }
     </div>

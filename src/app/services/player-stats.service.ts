@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardResponse } from '../models/player-stats.model';
+import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardResponse, PlayerRanksResponse } from '../models/player-stats.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -23,6 +23,12 @@ export class PlayerStatsService {
   getServerStats(): Observable<ServerStatsResponse> {
     return this.http.get<ServerStatsResponse>(
       `${environment.tmsApiBase}/stats/server`
+    );
+  }
+
+  getPlayerRanks(name: string): Observable<PlayerRanksResponse> {
+    return this.http.get<PlayerRanksResponse>(
+      `${environment.tmsApiBase}/players/name/${encodeURIComponent(name)}/ranks`
     );
   }
 

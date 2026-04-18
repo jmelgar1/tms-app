@@ -1,0 +1,71 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ stat().label }}</h3>
+      <button class="close-btn" (click)="close()">&times;</button>
+    </div>
+
+    <div class="section">
+      <h4 class="section-title">Server Contribution</h4>
+      <div class="contribution-stats">
+        <div class="contrib-row">
+          <span class="contrib-player">{{ viewedName() }}</span>
+          <span class="contrib-value">{{ viewedDisplayValue() }}</span>
+        </div>
+        <div class="contrib-bar-track">
+          <div
+            class="contrib-bar-fill"
+            [style.width.%]="viewedPercentage()"
+            [style.background-color]="color()"
+          ></div>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">Server Total</span>
+          <span class="contrib-value">{{ formattedServerTotal() }}</span>
+        </div>
+      </div>
+      <p class="percentage-text">
+        {{ viewedPercentage() | number:'1.1-1' }}% of server total
+      </p>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h4 class="section-title">Leaderboard</h4>
+        @if (viewedRank(); as rank) {
+          <span class="rank-badge" [style.background-color]="color()">#{{ rank }}</span>
+        }
+      </div>
+
+      @if (leaderboardLoading()) {
+        <p class="status-text">Loading leaderboard...</p>
+      } @else if (leaderboardError()) {
+        <p class="status-text error">Failed to load leaderboard.</p>
+      } @else if (leaderboard().length === 0) {
+        <p class="status-text">No players have this stat.</p>
+      } @else {
+        <div class="leaderboard-list">
+          @for (entry of leaderboard(); track entry.uuid) {
+            <div class="leaderboard-row" [class.current-player]="isViewedPlayer(entry)">
+              <span class="lb-rank">#{{ entry.rank }}</span>
+              <img [src]="avatarUrl(entry.uuid)" class="lb-avatar" [alt]="entry.name" />
+              <span
+                class="lb-name"
+                [class.clickable]="!isViewedPlayer(entry)"
+                (click)="onPlayerClick(entry)"
+              >{{ entry.name }}</span>
+              <div class="lb-bar-track">
+                <div
+                  class="lb-bar-fill"
+                  [style.width.%]="leaderboardPercentage(entry)"
+                  [style.background-color]="color()"
+                ></div>
+              </div>
+              <span class="lb-value">{{ formatValue(entry.value) }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

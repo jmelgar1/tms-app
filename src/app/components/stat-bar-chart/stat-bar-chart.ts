@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 import { DisplayStat } from '../../models/player-stats.model';
 
 @Component({
@@ -11,6 +11,8 @@ export class StatBarChart {
   stats = input.required<DisplayStat[]>();
   barColor = input<string>('#27ae60');
   scrollable = input<boolean>(false);
+
+  statClicked = output<DisplayStat>();
 
   canScrollUp = signal(false);
   canScrollDown = signal(true);

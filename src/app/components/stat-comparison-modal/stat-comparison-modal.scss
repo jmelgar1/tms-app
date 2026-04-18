@@ -1,0 +1,287 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal-panel {
+  background: rgba(20, 20, 20, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+
+    &:hover {
+      background: #666;
+    }
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-title {
+  color: #fff;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.section {
+  margin-bottom: 1.25rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  color: #ccc;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.75rem;
+
+  .section-header & {
+    margin-bottom: 0;
+  }
+}
+
+.rank-badge {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+// Server Contribution Section
+
+.contribution-stats {
+  margin-bottom: 0.5rem;
+}
+
+.contrib-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.contrib-player {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.contrib-label {
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+.contrib-value {
+  color: #ccc;
+  font-size: 0.85rem;
+}
+
+.contrib-bar-track {
+  height: 24px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.35rem;
+}
+
+.contrib-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease-out;
+  min-width: 2px;
+}
+
+.percentage-text {
+  color: #aaa;
+  font-size: 0.85rem;
+  margin: 0;
+  text-align: center;
+}
+
+// Leaderboard Section
+
+.leaderboard-list {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 3px;
+
+    &:hover {
+      background: #666;
+    }
+  }
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+
+  &.current-player {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+.lb-rank {
+  width: 30px;
+  flex-shrink: 0;
+  color: #888;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.lb-avatar {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  border-radius: 2px;
+}
+
+.lb-name {
+  width: 100px;
+  flex-shrink: 0;
+  color: #ccc;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+
+  .current-player & {
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+.lb-bar-track {
+  flex: 1;
+  height: 16px;
+  background: #1a1a1a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lb-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease-out;
+  min-width: 2px;
+}
+
+.lb-value {
+  width: 90px;
+  flex-shrink: 0;
+  color: #aaa;
+  font-size: 0.8rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.status-text {
+  color: #888;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem 0;
+
+  &.error {
+    color: #e74c3c;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-panel {
+    max-height: 90vh;
+    padding: 1rem;
+  }
+
+  .lb-name {
+    width: 70px;
+    font-size: 0.8rem;
+  }
+
+  .lb-value {
+    width: 70px;
+    font-size: 0.75rem;
+  }
+
+  .lb-rank {
+    width: 24px;
+    font-size: 0.75rem;
+  }
+}

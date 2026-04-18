@@ -3,15 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { PlayerStatsService } from '../../services/player-stats.service';
-import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry } from '../../models/player-stats.model';
+import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse } from '../../models/player-stats.model';
 import { PlayerHeader } from '../../components/player-header/player-header';
 import { StatHighlight } from '../../components/stat-highlight/stat-highlight';
 import { StatBarChart } from '../../components/stat-bar-chart/stat-bar-chart';
+import { StatComparisonModal } from '../../components/stat-comparison-modal/stat-comparison-modal';
 import { extractHeadlineStats, buildChartGroups, formatNumber } from '../../utils/stat-utils';
 
 @Component({
   selector: 'app-stats',
-  imports: [RouterLink, FormsModule, PlayerHeader, StatHighlight, StatBarChart],
+  imports: [RouterLink, FormsModule, PlayerHeader, StatHighlight, StatBarChart, StatComparisonModal],
   templateUrl: './stats.html',
   styleUrl: './stats.scss',
 })
@@ -25,6 +26,7 @@ export class Stats implements OnInit {
   // Player view
   statsResult = signal<PlayerStatsResponse | null>(null);
   playerInfo = signal<PlayerInfoResponse | null>(null);
+  playerRanks = signal<PlayerRanksResponse | null>(null);
 
   // Server view
   serverStats = signal<ServerStatsResponse | null>(null);
@@ -35,6 +37,10 @@ export class Stats implements OnInit {
   // Which view is active
   viewingPlayer = signal(false);
 
+  // Modal state
+  selectedStat = signal<DisplayStat | null>(null);
+  selectedColor = signal<string>('#27ae60');
+
   headlines = computed(() => {
     const stats = this.viewingPlayer() ? this.statsResult()?.stats : this.serverStats()?.stats;
     if (!stats) return null;
@@ -44,12 +50,31 @@ export class Stats implements OnInit {
   chartGroups = computed(() => {
     const stats = this.viewingPlayer() ? this.statsResult()?.stats : this.serverStats()?.stats;
     if (!stats) return [];
-    return buildChartGroups(stats);
+    const ranks = this.viewingPlayer() ? this.playerRanks()?.ranks : undefined;
+    return buildChartGroups(stats, ranks);
   });
 
   serverPlayerCount = computed(() => {
     const s = this.serverStats();
     return s ? formatNumber(s.playerCount) : '0';
+  });
+
+  selectedServerTotal = computed(() => {
+    const stat = this.selectedStat();
+    const server = this.serverStats();
+    if (!stat || !server) return 0;
+
+    if (stat.statKey === 'Environmental') {
+      const custom = server.stats['minecraft:custom'] ?? [];
+      const totalDeaths = custom.find(e => e.stat === 'minecraft:deaths')?.value ?? 0;
+      const killedBy = server.stats['minecraft:killed_by'] ?? [];
+      const mobDeaths = killedBy.reduce((sum, e) => sum + e.value, 0);
+      return Math.max(0, totalDeaths - mobDeaths);
+    }
+
+    const categoryStats = server.stats[stat.category] ?? [];
+    const match = categoryStats.find(e => e.stat === stat.statKey);
+    return match?.value ?? 0;
   });
 
   ngOnInit(): void {
@@ -74,14 +99,17 @@ export class Stats implements OnInit {
     this.error.set(null);
     this.statsResult.set(null);
     this.playerInfo.set(null);
+    this.playerRanks.set(null);
 
     forkJoin({
       stats: this.statsService.getStatsByName(name),
       info: this.statsService.getPlayerInfo(name),
+      ranks: this.statsService.getPlayerRanks(name),
     }).subscribe({
-      next: ({ stats, info }) => {
+      next: ({ stats, info, ranks }) => {
         this.statsResult.set(stats);
         this.playerInfo.set(info);
+        this.playerRanks.set(ranks);
         this.viewingPlayer.set(true);
         this.loading.set(false);
       },
@@ -96,10 +124,21 @@ export class Stats implements OnInit {
     });
   }
 
+  onStatClicked(stat: DisplayStat, color: string): void {
+    if (!this.viewingPlayer()) return;
+    this.selectedStat.set(stat);
+    this.selectedColor.set(color);
+  }
+
+  closeModal(): void {
+    this.selectedStat.set(null);
+  }
+
   backToServer(): void {
     this.viewingPlayer.set(false);
     this.statsResult.set(null);
     this.playerInfo.set(null);
+    this.playerRanks.set(null);
     this.error.set(null);
     this.searchName = '';
   }

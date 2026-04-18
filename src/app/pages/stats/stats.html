@@ -1,6 +1,7 @@
 <div class="stats">
   @if (viewingPlayer()) {
     <button class="back-btn" (click)="backToServer()">&larr; Back to Server Stats</button>
+    <h1>Player Statistics</h1>
   } @else {
     <a routerLink="/" class="back-btn">&larr; Back to Home</a>
     <h1>Server Statistics</h1>
@@ -45,6 +46,7 @@
           [stats]="group.stats"
           [barColor]="group.color"
           [scrollable]="group.scrollable ?? false"
+          (statClicked)="onStatClicked($event, group.color)"
         />
       }
     }
@@ -87,11 +89,25 @@
           [stats]="group.stats"
           [barColor]="group.color"
           [scrollable]="group.scrollable ?? false"
+          (statClicked)="onStatClicked($event, group.color)"
         />
       }
     }
   }
 </div>
+
+@if (selectedStat(); as stat) {
+  @if (viewingPlayer() && playerInfo(); as info) {
+    <app-stat-comparison-modal
+      [stat]="stat"
+      [playerName]="info.name"
+      [playerUuid]="info.uuid"
+      [serverTotal]="selectedServerTotal()"
+      [color]="selectedColor()"
+      (closed)="closeModal()"
+    />
+  }
+}
 
 @if (loading()) {
   <div class="loading-toast">Loading stats...</div>

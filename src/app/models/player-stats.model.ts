@@ -35,11 +35,25 @@ export interface LeaderboardEntry {
   value: number;
 }
 
+export interface RankEntry {
+  stat: string;
+  rank: number;
+}
+
+export interface PlayerRanksResponse {
+  uuid: string;
+  name: string;
+  ranks: Record<string, RankEntry[]>;
+}
+
 export interface DisplayStat {
   label: string;
   rawValue: number;
   displayValue: string;
   percentage: number;
+  statKey: string;
+  category: string;
+  rank?: number;
 }
 
 export interface StatChartGroup {
