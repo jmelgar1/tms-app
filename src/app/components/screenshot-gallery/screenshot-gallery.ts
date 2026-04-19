@@ -1,9 +1,11 @@
 import { Component, inject, input, output, signal, computed, OnInit, OnChanges, AfterViewInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ScreenshotService } from '../../services/screenshot.service';
 import { Screenshot } from '../../models/screenshot.model';
 
 @Component({
   selector: 'app-screenshot-gallery',
+  imports: [DatePipe],
   templateUrl: './screenshot-gallery.html',
   styleUrl: './screenshot-gallery.scss',
 })
