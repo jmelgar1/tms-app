@@ -9,6 +9,9 @@
     <p class="status-text error">Failed to load screenshots.</p>
   } @else if (screenshots().length === 0) {
     <p class="status-text">No screenshots yet. Be the first to upload!</p>
+    <div class="empty-upload">
+      <button class="upload-btn" (click)="onUploadClick()">Upload</button>
+    </div>
   } @else {
     <div class="gallery-wrap" [class.fade-left]="canScrollUp()" [class.fade-right]="canScrollDown()">
       <div class="gallery-viewport" (wheel)="onWheel($event)">
