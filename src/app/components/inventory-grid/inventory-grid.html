@@ -20,10 +20,9 @@
              (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
              (mouseleave)="hideTooltip()">
           @if (getSlot(slotIdx); as item) {
-            <img [src]="itemIconUrl(item.itemId)"
-                 [alt]="formatItemName(item)"
-                 class="item-icon"
-                 (error)="onIconError($event)" />
+            <div class="item-icon"
+                 [ngStyle]="itemSpriteStyle(item.itemId)"
+                 [title]="formatItemName(item)"></div>
             @if (item.count > 1) {
               <span class="item-count">{{ item.count }}</span>
             }
@@ -42,10 +41,9 @@
                (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
                (mouseleave)="hideTooltip()">
             @if (getSlot(slotIdx); as item) {
-              <img [src]="itemIconUrl(item.itemId)"
-                   [alt]="formatItemName(item)"
-                   class="item-icon"
-                   (error)="onIconError($event)" />
+              <div class="item-icon"
+                   [ngStyle]="itemSpriteStyle(item.itemId)"
+                   [title]="formatItemName(item)"></div>
               @if (item.count > 1) {
                 <span class="item-count">{{ item.count }}</span>
               }
@@ -63,10 +61,9 @@
                (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
                (mouseleave)="hideTooltip()">
             @if (getSlot(slotIdx); as item) {
-              <img [src]="itemIconUrl(item.itemId)"
-                   [alt]="formatItemName(item)"
-                   class="item-icon"
-                   (error)="onIconError($event)" />
+              <div class="item-icon"
+                   [ngStyle]="itemSpriteStyle(item.itemId)"
+                   [title]="formatItemName(item)"></div>
               @if (item.count > 1) {
                 <span class="item-count">{{ item.count }}</span>
               }
@@ -85,10 +82,9 @@
            (mouseenter)="getSlot(offhandSlot) && showTooltip($event, getSlot(offhandSlot)!)"
            (mouseleave)="hideTooltip()">
         @if (getSlot(offhandSlot); as item) {
-          <img [src]="itemIconUrl(item.itemId)"
-               [alt]="formatItemName(item)"
-               class="item-icon"
-               (error)="onIconError($event)" />
+          <div class="item-icon"
+               [ngStyle]="itemSpriteStyle(item.itemId)"
+               [title]="formatItemName(item)"></div>
           @if (item.count > 1) {
             <span class="item-count">{{ item.count }}</span>
           }

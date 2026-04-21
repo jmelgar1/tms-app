@@ -1,8 +1,15 @@
 import { Component, computed, input, signal } from '@angular/core';
+import { NgStyle } from '@angular/common';
 import { PlayerInventoryResponse, InventorySlot } from '../../models/player-stats.model';
+import { SPRITE_MAP } from './sprite-map';
+
+const SPRITESHEET_URL = 'https://pub-7cdebf4e8e6a4b16a846ef6af6dd72ae.r2.dev/inventory/items-spritesheet.png';
+const TILE_SIZE = 64;
+const GRID_SIZE = 39;
 
 @Component({
   selector: 'app-inventory-grid',
+  imports: [NgStyle],
   templateUrl: './inventory-grid.html',
   styleUrl: './inventory-grid.scss',
 })
@@ -35,10 +42,17 @@ export class InventoryGrid {
     return !!slot?.enchantments?.length;
   }
 
-  itemIconUrl(itemId: string): string {
-    // CDN expects "minecraft_diamond_sword" format (colon -> underscore)
+  itemSpriteStyle(itemId: string): Record<string, string> | null {
     const name = itemId.replace(':', '_');
-    return `https://mc.nerothe.com/img/1.21.11/${name}.png`;
+    const pos = SPRITE_MAP[name];
+    if (!pos) return null;
+    const col = pos.x / TILE_SIZE;
+    const row = pos.y / TILE_SIZE;
+    return {
+      'background-image': `url(${SPRITESHEET_URL})`,
+      'background-size': `${GRID_SIZE * 100}% ${GRID_SIZE * 100}%`,
+      'background-position': `${col * 100 / (GRID_SIZE - 1)}% ${row * 100 / (GRID_SIZE - 1)}%`,
+    };
   }
 
   showTooltip(event: MouseEvent, slot: InventorySlot): void {
@@ -82,8 +96,4 @@ export class InventoryGrid {
     return '#e74c3c';
   }
 
-  onIconError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
-  }
 }
