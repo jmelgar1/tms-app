@@ -62,3 +62,25 @@ export interface StatChartGroup {
   color: string;
   scrollable?: boolean;
 }
+
+export interface EnchantmentEntry {
+  id: string;
+  level: number;
+}
+
+export interface InventorySlot {
+  slot: number;
+  itemId: string;
+  count: number;
+  displayName?: string;
+  enchantments?: EnchantmentEntry[];
+  durability?: number;
+  maxDurability?: number;
+}
+
+export interface PlayerInventoryResponse {
+  uuid: string;
+  name: string;
+  online: boolean;
+  slots: InventorySlot[];
+}

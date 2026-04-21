@@ -1,0 +1,242 @@
+.inventory-container {
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.inventory-label {
+  color: #aaa;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.live-badge {
+  background: rgba(39, 174, 96, 0.2);
+  color: #27ae60;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.snapshot-badge {
+  background: rgba(170, 170, 170, 0.15);
+  color: #888;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.inventory-layout {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.armor-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 40px);
+  gap: 2px;
+}
+
+.hotbar-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 40px);
+  gap: 2px;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.5rem;
+}
+
+.offhand-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.inv-slot {
+  width: 40px;
+  height: 40px;
+  background: rgba(60, 60, 60, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+
+  &.empty {
+    background: rgba(40, 40, 40, 0.4);
+  }
+
+  &:hover:not(.empty) {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(80, 80, 80, 0.6);
+  }
+
+  &.enchanted .item-icon {
+    animation: enchant-glint 3s ease-in-out infinite;
+  }
+}
+
+@keyframes enchant-glint {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 1px rgba(100, 50, 200, 0.3));
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 4px rgba(100, 50, 200, 0.7))
+            drop-shadow(0 0 2px rgba(80, 180, 255, 0.5));
+  }
+}
+
+.item-icon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.item-count {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.item-tooltip {
+  position: fixed;
+  z-index: 100;
+  background: rgba(16, 0, 16, 0.94);
+  border: 1px solid #5000a0;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
+  pointer-events: none;
+  min-width: 150px;
+  max-width: 280px;
+}
+
+.tooltip-name {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+
+  &.enchanted {
+    color: #55ffff;
+  }
+}
+
+.tooltip-enchant {
+  color: #aaa;
+  font-size: 0.75rem;
+}
+
+.tooltip-durability {
+  color: #aaa;
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.durability-bar {
+  width: 100%;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  margin-top: 0.2rem;
+  overflow: hidden;
+}
+
+.durability-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.2s;
+}
+
+// Compact mode: no container chrome, scaled up to fill the player header
+.inventory-container.compact {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+
+  .main-grid,
+  .hotbar-grid {
+    grid-template-columns: repeat(9, 44px);
+  }
+
+  .inv-slot {
+    width: 44px;
+    height: 44px;
+  }
+
+  .item-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 600px) {
+  .inventory-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .armor-column {
+    flex-direction: row;
+  }
+
+  .main-grid,
+  .hotbar-grid {
+    grid-template-columns: repeat(9, 36px);
+  }
+
+  .inv-slot {
+    width: 36px;
+    height: 36px;
+  }
+
+  .item-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .offhand-column {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .spacer {
+    display: none;
+  }
+}

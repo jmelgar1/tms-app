@@ -17,6 +17,19 @@ export class StatBarChart {
   canScrollUp = signal(false);
   canScrollDown = signal(true);
 
+  rankColor(rank: number): string {
+    switch (rank) {
+      case 1: return '#EFBF04';
+      case 2: return '#ffffff';
+      case 3: return '#CE8946';
+      default: return '#666666';
+    }
+  }
+
+  rankTextColor(rank: number): string {
+    return rank === 2 ? '#1a1a1a' : '#fff';
+  }
+
   onScroll(event: Event): void {
     const el = event.target as HTMLElement;
     this.canScrollUp.set(el.scrollTop > 0);

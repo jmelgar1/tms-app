@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ServerStatusService } from '../../services/server-status.service';
 import { ServerStatus, PlayerInfo } from '../../models/server-status.model';
@@ -22,6 +22,13 @@ export class Home implements OnInit, OnDestroy {
   error = signal<string | null>(null);
   showUploadModal = signal(false);
   galleryRefresh = signal(0);
+
+  daysSinceStart = computed(() => {
+    const start = new Date(2024, 7, 31); // August 31, 2024
+    const now = new Date();
+    const diff = now.getTime() - start.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+  });
 
   ngOnInit(): void {
     const cached = this.statusService.cachedStatus;

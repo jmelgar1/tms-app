@@ -4,6 +4,7 @@ export interface Screenshot {
   playerUuid: string;
   caption: string | null;
   uploadedAt: string;
+  imageUrl: string | null;
 }
 
 export interface ScreenshotListResponse {

@@ -13,30 +13,36 @@
       <button class="upload-btn" (click)="onUploadClick()">Upload</button>
     </div>
   } @else {
-    <div class="gallery-wrap" [class.fade-left]="canScrollUp()" [class.fade-right]="canScrollDown()">
+    <div class="gallery-wrap">
+      @if (canScrollUp()) {
+        <button class="nav-arrow nav-arrow-left" (click)="goPrev()">&#8249;</button>
+      }
+      @if (canScrollDown()) {
+        <button class="nav-arrow nav-arrow-right" (click)="goNext()">&#8250;</button>
+      }
       <div class="gallery-viewport" (wheel)="onWheel($event)">
         <div class="gallery-track" [style.transform]="trackTransform()">
           @for (screenshot of screenshots(); track screenshot.id) {
             <div class="screenshot-card" #card>
               <img
-                [src]="imageUrl(screenshot.id)"
+                [src]="imageUrl(screenshot)"
                 [alt]="screenshot.caption || 'Screenshot by ' + screenshot.playerName"
                 class="screenshot-img"
                 loading="lazy"
               />
               <div class="screenshot-info">
-                @if (screenshot.caption) {
-                  <p class="screenshot-caption">{{ screenshot.caption }}</p>
-                }
-                <div class="screenshot-player">
-                  <img
-                    [src]="avatarUrl(screenshot.playerUuid)"
-                    [alt]="screenshot.playerName"
-                    class="screenshot-avatar"
-                  />
+                <img
+                  [src]="avatarUrl(screenshot.playerUuid)"
+                  [alt]="screenshot.playerName"
+                  class="screenshot-avatar"
+                />
+                <div class="screenshot-details">
                   <span class="screenshot-name">{{ screenshot.playerName }}</span>
-                  <span class="screenshot-date">{{ screenshot.uploadedAt | date:'mediumDate' }}</span>
+                  @if (screenshot.caption) {
+                    <span class="screenshot-caption">{{ screenshot.caption }}</span>
+                  }
                 </div>
+                <span class="screenshot-date">{{ screenshot.uploadedAt | date:'mediumDate' }}</span>
               </div>
             </div>
           }

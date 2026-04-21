@@ -1,9 +1,9 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 import { PlayerStatsService } from '../../services/player-stats.service';
-import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse } from '../../models/player-stats.model';
+import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse, PlayerInventoryResponse } from '../../models/player-stats.model';
 import { PlayerHeader } from '../../components/player-header/player-header';
 import { StatHighlight } from '../../components/stat-highlight/stat-highlight';
 import { StatBarChart } from '../../components/stat-bar-chart/stat-bar-chart';
@@ -27,6 +27,7 @@ export class Stats implements OnInit {
   statsResult = signal<PlayerStatsResponse | null>(null);
   playerInfo = signal<PlayerInfoResponse | null>(null);
   playerRanks = signal<PlayerRanksResponse | null>(null);
+  playerInventory = signal<PlayerInventoryResponse | null>(null);
 
   // Server view
   serverStats = signal<ServerStatsResponse | null>(null);
@@ -100,16 +101,21 @@ export class Stats implements OnInit {
     this.statsResult.set(null);
     this.playerInfo.set(null);
     this.playerRanks.set(null);
+    this.playerInventory.set(null);
 
     forkJoin({
       stats: this.statsService.getStatsByName(name),
       info: this.statsService.getPlayerInfo(name),
       ranks: this.statsService.getPlayerRanks(name),
+      inventory: this.statsService.getPlayerInventory(name).pipe(
+        catchError(() => of(null))
+      ),
     }).subscribe({
-      next: ({ stats, info, ranks }) => {
+      next: ({ stats, info, ranks, inventory }) => {
         this.statsResult.set(stats);
         this.playerInfo.set(info);
         this.playerRanks.set(ranks);
+        this.playerInventory.set(inventory);
         this.viewingPlayer.set(true);
         this.loading.set(false);
       },
@@ -139,6 +145,7 @@ export class Stats implements OnInit {
     this.statsResult.set(null);
     this.playerInfo.set(null);
     this.playerRanks.set(null);
+    this.playerInventory.set(null);
     this.error.set(null);
     this.searchName = '';
   }

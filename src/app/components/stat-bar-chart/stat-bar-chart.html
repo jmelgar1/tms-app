@@ -21,7 +21,7 @@
           </div>
           <span class="bar-value">{{ stat.displayValue }}</span>
           @if (stat.rank) {
-            <span class="bar-rank" [style.background-color]="barColor()">#{{ stat.rank }}</span>
+            <span class="bar-rank" [style.background-color]="rankColor(stat.rank)" [style.color]="rankTextColor(stat.rank)">#{{ stat.rank }}</span>
           }
         </div>
       }

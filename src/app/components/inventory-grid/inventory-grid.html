@@ -1,0 +1,128 @@
+<div class="inventory-container" [class.compact]="compact()">
+  @if (!compact()) {
+    <div class="inventory-label">
+      Inventory
+      @if (inventory().online) {
+        <span class="live-badge">Live</span>
+      } @else {
+        <span class="snapshot-badge">Last Seen</span>
+      }
+    </div>
+  }
+
+  <div class="inventory-layout">
+    <!-- Armor Column -->
+    <div class="armor-column">
+      @for (slotIdx of armorSlots; track slotIdx) {
+        <div class="inv-slot armor-slot"
+             [class.empty]="!getSlot(slotIdx)"
+             [class.enchanted]="isEnchanted(slotIdx)"
+             (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
+             (mouseleave)="hideTooltip()">
+          @if (getSlot(slotIdx); as item) {
+            <img [src]="itemIconUrl(item.itemId)"
+                 [alt]="formatItemName(item)"
+                 class="item-icon"
+                 (error)="onIconError($event)" />
+            @if (item.count > 1) {
+              <span class="item-count">{{ item.count }}</span>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <div class="main-section">
+      <!-- Main Inventory (3 rows x 9 columns) -->
+      <div class="main-grid">
+        @for (slotIdx of mainSlots; track slotIdx) {
+          <div class="inv-slot"
+               [class.empty]="!getSlot(slotIdx)"
+               [class.enchanted]="isEnchanted(slotIdx)"
+               (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
+               (mouseleave)="hideTooltip()">
+            @if (getSlot(slotIdx); as item) {
+              <img [src]="itemIconUrl(item.itemId)"
+                   [alt]="formatItemName(item)"
+                   class="item-icon"
+                   (error)="onIconError($event)" />
+              @if (item.count > 1) {
+                <span class="item-count">{{ item.count }}</span>
+              }
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Hotbar (separated) -->
+      <div class="hotbar-grid">
+        @for (slotIdx of hotbarSlots; track slotIdx) {
+          <div class="inv-slot hotbar-slot"
+               [class.empty]="!getSlot(slotIdx)"
+               [class.enchanted]="isEnchanted(slotIdx)"
+               (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
+               (mouseleave)="hideTooltip()">
+            @if (getSlot(slotIdx); as item) {
+              <img [src]="itemIconUrl(item.itemId)"
+                   [alt]="formatItemName(item)"
+                   class="item-icon"
+                   (error)="onIconError($event)" />
+              @if (item.count > 1) {
+                <span class="item-count">{{ item.count }}</span>
+              }
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Offhand -->
+    <div class="offhand-column">
+      <div class="spacer"></div>
+      <div class="inv-slot offhand-slot"
+           [class.empty]="!getSlot(offhandSlot)"
+           [class.enchanted]="isEnchanted(offhandSlot)"
+           (mouseenter)="getSlot(offhandSlot) && showTooltip($event, getSlot(offhandSlot)!)"
+           (mouseleave)="hideTooltip()">
+        @if (getSlot(offhandSlot); as item) {
+          <img [src]="itemIconUrl(item.itemId)"
+               [alt]="formatItemName(item)"
+               class="item-icon"
+               (error)="onIconError($event)" />
+          @if (item.count > 1) {
+            <span class="item-count">{{ item.count }}</span>
+          }
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Tooltip -->
+  @if (tooltipSlot(); as tip) {
+    <div class="item-tooltip"
+         [style.left.px]="tooltipPosition().x + 12"
+         [style.top.px]="tooltipPosition().y - 12">
+      <div class="tooltip-name" [class.enchanted]="tip.enchantments?.length">
+        {{ formatItemName(tip) }}
+      </div>
+      @if (tip.enchantments?.length) {
+        @for (ench of tip.enchantments; track ench.id) {
+          <div class="tooltip-enchant">
+            {{ formatEnchantmentName(ench.id) }} {{ romanNumeral(ench.level) }}
+          </div>
+        }
+      }
+      @if (tip.durability != null && tip.maxDurability != null) {
+        <div class="tooltip-durability">
+          Durability: {{ tip.durability }} / {{ tip.maxDurability }}
+          <div class="durability-bar">
+            <div class="durability-fill"
+                 [style.width.%]="durabilityPercent(tip)"
+                 [style.backgroundColor]="durabilityColor(tip)">
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

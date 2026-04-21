@@ -26,7 +26,7 @@ export class ScreenshotGallery implements OnInit, OnChanges, AfterViewInit {
   canScrollDown = computed(() => this.currentIndex() < this.screenshots().length - 1);
 
   private cardWidth = signal(0);
-  private readonly gap = 12; // 0.75rem
+  private readonly gap = 16; // 1rem
   private scrolling = false;
 
   trackTransform = computed(() => {
@@ -50,8 +50,8 @@ export class ScreenshotGallery implements OnInit, OnChanges, AfterViewInit {
     this.cards.changes.subscribe(() => this.measureCardWidth());
   }
 
-  imageUrl(id: number): string {
-    return this.screenshotService.imageUrl(id);
+  imageUrl(screenshot: Screenshot): string {
+    return screenshot.imageUrl || this.screenshotService.imageUrl(screenshot.id);
   }
 
   avatarUrl(uuid: string): string {
