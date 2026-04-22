@@ -25,11 +25,13 @@
 .content-row {
   display: flex;
   gap: 2rem;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .left-column {
   flex: 0 0 500px;
+  display: flex;
+  flex-direction: column;
 }
 
 .right-column {
@@ -52,7 +54,7 @@
 }
 
 .server-region {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.4);
 }
 
@@ -86,6 +88,8 @@
 
 .status-section {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .status-card {
@@ -93,7 +97,9 @@
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  padding: 1.25rem 1.5rem;
+  padding: 1.15rem 1.4rem;
+  display: flex;
+  flex-direction: column;
   color: #fff;
 }
 
@@ -101,20 +107,20 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .status-header {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .server-icon {
-  width: 80px;
-  height: 80px;
+  width: 112px;
+  height: 112px;
   image-rendering: pixelated;
   border-radius: 4px;
   flex-shrink: 0;
@@ -134,12 +140,12 @@
 
 .server-name {
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   color: #fff;
 }
 
 .player-count {
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   color: rgba(255, 255, 255, 0.7);
   white-space: nowrap;
 }
@@ -155,7 +161,7 @@
   display: inline-block;
   padding: 0.15rem 0.65rem;
   border-radius: 3px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
 
   &.online {
@@ -170,28 +176,28 @@
 }
 
 .version {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.5);
 }
 
 .software {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.4);
 }
 
 .motd {
   margin-top: 0.5rem;
   font-family: monospace;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   white-space: pre-wrap;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .players {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  height: 48px;
+  height: 60px;
   display: flex;
   align-items: center;
 }
@@ -209,14 +215,15 @@
   flex-wrap: wrap;
   gap: 0.4rem;
 
-  li {
-    cursor: pointer;
+  li a {
+    display: block;
+    line-height: 0;
   }
 }
 
 .player-avatar {
-  width: 40px;
-  height: 40px;
+  width: 52px;
+  height: 52px;
   image-rendering: pixelated;
   border-radius: 3px;
   border: 2px solid rgba(255, 255, 255, 0.1);
@@ -231,11 +238,11 @@
 }
 
 .day-counter {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.4);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   text-align: center;
 }
 

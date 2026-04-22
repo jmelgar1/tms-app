@@ -45,6 +45,9 @@ src/environments/environment.prod.ts
 .env
 .env.local
 
+# Vercel config (contains server IP in rewrite rules)
+vercel.json
+
 # System files
 .DS_Store
 Thumbs.db

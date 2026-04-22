@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
 import { PlayerStatsService } from '../../services/player-stats.service';
 import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse, PlayerInventoryResponse } from '../../models/player-stats.model';
@@ -18,6 +18,7 @@ import { extractHeadlineStats, buildChartGroups, formatNumber } from '../../util
 })
 export class Stats implements OnInit {
   private statsService = inject(PlayerStatsService);
+  private route = inject(ActivatedRoute);
 
   searchName = '';
   loading = signal(false);
@@ -81,6 +82,11 @@ export class Stats implements OnInit {
   ngOnInit(): void {
     this.loadServerStats();
     this.loadPlayerList();
+
+    const playerName = this.route.snapshot.queryParamMap.get('player');
+    if (playerName) {
+      this.selectPlayer(playerName);
+    }
   }
 
   avatarUrl(uuid: string): string {

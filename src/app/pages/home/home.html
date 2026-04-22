@@ -51,8 +51,10 @@
                 @if (s.players.list && s.players.list.length > 0) {
                   <ul class="player-list">
                     @for (player of s.players.list; track player.uuid) {
-                      <li [title]="playerName(player)">
-                        <img [src]="playerAvatarUrl(player)" [alt]="playerName(player)" class="player-avatar" />
+                      <li>
+                        <a [routerLink]="'/stats'" [queryParams]="{ player: playerName(player) }" [title]="playerName(player)">
+                          <img [src]="playerAvatarUrl(player)" [alt]="playerName(player)" class="player-avatar" />
+                        </a>
                       </li>
                     }
                   </ul>
