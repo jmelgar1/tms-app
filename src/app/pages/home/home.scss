@@ -8,9 +8,10 @@
   &::before {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: -8px;
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
       url('/assets/home-bg.png') center / cover no-repeat;
+    background-color: #111;
     filter: blur(4px);
     z-index: 0;
 

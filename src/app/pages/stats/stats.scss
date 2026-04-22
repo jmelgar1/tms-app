@@ -8,8 +8,9 @@
   &::before {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: -8px;
     background: url('/assets/stats-bg.png') center / cover no-repeat;
+    background-color: #111;
     filter: blur(4px);
     z-index: 0;
 
