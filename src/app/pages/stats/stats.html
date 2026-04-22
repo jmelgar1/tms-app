@@ -41,6 +41,10 @@
         />
       }
 
+      @if (playerAdvancements(); as advData) {
+        <app-achievement-grid [advancements]="advData" />
+      }
+
       @for (group of chartGroups(); track group.title) {
         <app-stat-bar-chart
           [title]="group.title"

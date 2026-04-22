@@ -84,3 +84,28 @@ export interface PlayerInventoryResponse {
   online: boolean;
   slots: InventorySlot[];
 }
+
+export interface AdvancementEntry {
+  id: string;
+  title: string;
+  description: string;
+  iconItem: string;
+  frameType: 'task' | 'goal' | 'challenge';
+  hidden: boolean;
+  completed: boolean;
+  completedAt: string | null;
+}
+
+export interface AdvancementCategory {
+  advancements: AdvancementEntry[];
+  completedCount: number;
+  totalCount: number;
+}
+
+export interface PlayerAdvancementsResponse {
+  uuid: string;
+  name: string;
+  categories: Record<string, AdvancementCategory>;
+  totalCompleted: number;
+  totalAvailable: number;
+}

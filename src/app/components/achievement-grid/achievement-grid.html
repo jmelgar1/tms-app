@@ -1,0 +1,52 @@
+<div class="achievements-container">
+  <button class="achievements-header" (click)="toggle()">
+    <span class="achievements-label">Advancements</span>
+    <span class="achievements-count">{{ totalCompleted() }} / {{ totalAvailable() }}</span>
+    <span class="toggle-icon" [class.open]="!collapsed()">&#9654;</span>
+  </button>
+
+  @if (!collapsed()) {
+    <div class="achievements-body">
+      @for (cat of orderedCategories(); track cat.key) {
+        <div class="achievement-category">
+          <div class="category-header">
+            <span class="category-title" [style.color]="cat.color">{{ cat.title }}</span>
+            <span class="category-progress">{{ cat.completedCount }} / {{ cat.totalCount }}</span>
+          </div>
+          <div class="achievement-grid">
+            @for (adv of cat.advancements; track adv.id) {
+              <div class="adv-slot"
+                   [class.completed]="adv.completed"
+                   [class.locked]="!adv.completed"
+                   [class.challenge]="adv.frameType === 'challenge'"
+                   [class.goal]="adv.frameType === 'goal'"
+                   (mouseenter)="showTooltip($event, adv)"
+                   (mouseleave)="hideTooltip()"
+                   (click)="toggleTooltip($event, adv)">
+                <div class="adv-icon"
+                     [ngStyle]="itemSpriteStyle(adv.iconItem)">
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (tooltipAdvancement(); as tip) {
+    <div class="adv-tooltip"
+         [style.left.px]="tooltipPosition().x + 12"
+         [style.top.px]="tooltipPosition().y - 12">
+      <div class="tooltip-title" [class.challenge]="tip.frameType === 'challenge'">
+        {{ tip.title }}
+      </div>
+      <div class="tooltip-desc">{{ tip.description }}</div>
+      @if (tip.completed) {
+        <div class="tooltip-status completed">Completed</div>
+      } @else {
+        <div class="tooltip-status locked">Not completed</div>
+      }
+    </div>
+  }
+</div>

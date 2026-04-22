@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardResponse, PlayerRanksResponse, PlayerInventoryResponse } from '../models/player-stats.model';
+import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardResponse, PlayerRanksResponse, PlayerInventoryResponse, PlayerAdvancementsResponse } from '../models/player-stats.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -35,6 +35,12 @@ export class PlayerStatsService {
   getPlayerInventory(name: string): Observable<PlayerInventoryResponse> {
     return this.http.get<PlayerInventoryResponse>(
       `${environment.tmsApiBase}/players/name/${encodeURIComponent(name)}/inventory`
+    );
+  }
+
+  getPlayerAdvancements(name: string): Observable<PlayerAdvancementsResponse> {
+    return this.http.get<PlayerAdvancementsResponse>(
+      `${environment.tmsApiBase}/players/name/${encodeURIComponent(name)}/advancements`
     );
   }
 
