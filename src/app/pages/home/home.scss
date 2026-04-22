@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 :host {
   display: block;
   position: relative;
@@ -11,6 +13,11 @@
       url('/assets/home-bg.png') center / cover no-repeat;
     filter: blur(4px);
     z-index: 0;
+
+    @include bp.respond-to(mobile) {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('/assets/home-bg-mobile.webp');
+    }
   }
 }
 
@@ -42,7 +49,7 @@
   align-self: flex-start;
 }
 
-@media (max-width: 900px) {
+@include bp.respond-to(tablet) {
   .content-row {
     flex-direction: column;
   }
@@ -50,6 +57,74 @@
   .left-column {
     flex: none;
     width: 100%;
+  }
+
+  .right-column {
+    position: static;
+    max-width: 600px;
+    width: 100%;
+  }
+}
+
+@include bp.respond-to(mobile) {
+  .home {
+    padding: 1.5rem 1rem;
+  }
+
+  .status-header {
+    gap: 0.75rem;
+  }
+
+  .server-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .server-name {
+    font-size: 1.3rem;
+  }
+
+  .player-count {
+    font-size: 1.1rem;
+  }
+
+  .player-avatar {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@include bp.respond-to(small) {
+  .home {
+    padding: 1rem 0.75rem;
+  }
+
+  .status-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .status-top-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .card-heading {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav-btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  .donate-btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
   }
 }
 

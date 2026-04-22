@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal, computed, OnInit, OnChanges, AfterViewInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, inject, input, output, signal, computed, OnInit, OnChanges, AfterViewInit, ViewChildren, QueryList, ElementRef, HostListener } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ScreenshotService } from '../../services/screenshot.service';
 import { Screenshot } from '../../models/screenshot.model';
@@ -71,6 +71,28 @@ export class ScreenshotGallery implements OnInit, OnChanges, AfterViewInit {
     } else if (event.deltaY < 0) {
       this.goPrev();
     }
+  }
+
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0].clientX;
+    this.touchStartY = event.touches[0].clientY;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const deltaX = event.changedTouches[0].clientX - this.touchStartX;
+    const deltaY = event.changedTouches[0].clientY - this.touchStartY;
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      if (deltaX < 0) this.goNext();
+      else this.goPrev();
+    }
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.measureCardWidth();
   }
 
   goNext(): void {

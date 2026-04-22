@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 :host {
   display: block;
   position: relative;
@@ -10,6 +12,10 @@
     background: url('/assets/stats-bg.png') center / cover no-repeat;
     filter: blur(4px);
     z-index: 0;
+
+    @include bp.respond-to(mobile) {
+      background-image: url('/assets/stats-bg-mobile.webp');
+    }
   }
 }
 
@@ -155,4 +161,18 @@ h1 {
 
 .error {
   color: #e74c3c;
+}
+
+@include bp.respond-to(mobile) {
+  .stats {
+    padding: 1.5rem 1rem;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+
+  .player-list {
+    justify-content: center;
+  }
 }

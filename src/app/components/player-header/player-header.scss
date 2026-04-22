@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 .player-header-card {
   display: flex;
   align-items: center;
@@ -71,7 +73,7 @@
   font-size: 0.85rem;
 }
 
-@media (max-width: 600px) {
+@include bp.respond-to(tablet) {
   .player-header-card {
     flex-direction: column;
     text-align: center;
@@ -85,6 +87,20 @@
 
   .player-info {
     align-items: center;
+  }
+}
+
+@include bp.respond-to(mobile) {
+  .player-header-card {
+    padding: 1rem;
+  }
+
+  .player-skin {
+    width: 80px;
+  }
+
+  .player-name {
+    font-size: 1.4rem;
   }
 
   .player-date {

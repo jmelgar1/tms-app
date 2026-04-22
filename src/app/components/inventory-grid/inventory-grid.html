@@ -18,7 +18,8 @@
              [class.empty]="!getSlot(slotIdx)"
              [class.enchanted]="isEnchanted(slotIdx)"
              (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
-             (mouseleave)="hideTooltip()">
+             (mouseleave)="hideTooltip()"
+             (click)="getSlot(slotIdx) && toggleTooltip($event, getSlot(slotIdx)!)">
           @if (getSlot(slotIdx); as item) {
             <div class="item-icon"
                  [ngStyle]="itemSpriteStyle(item.itemId)"
@@ -39,7 +40,8 @@
                [class.empty]="!getSlot(slotIdx)"
                [class.enchanted]="isEnchanted(slotIdx)"
                (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
-               (mouseleave)="hideTooltip()">
+               (mouseleave)="hideTooltip()"
+               (click)="getSlot(slotIdx) && toggleTooltip($event, getSlot(slotIdx)!)">
             @if (getSlot(slotIdx); as item) {
               <div class="item-icon"
                    [ngStyle]="itemSpriteStyle(item.itemId)"
@@ -59,7 +61,8 @@
                [class.empty]="!getSlot(slotIdx)"
                [class.enchanted]="isEnchanted(slotIdx)"
                (mouseenter)="getSlot(slotIdx) && showTooltip($event, getSlot(slotIdx)!)"
-               (mouseleave)="hideTooltip()">
+               (mouseleave)="hideTooltip()"
+               (click)="getSlot(slotIdx) && toggleTooltip($event, getSlot(slotIdx)!)">
             @if (getSlot(slotIdx); as item) {
               <div class="item-icon"
                    [ngStyle]="itemSpriteStyle(item.itemId)"
@@ -80,7 +83,8 @@
            [class.empty]="!getSlot(offhandSlot)"
            [class.enchanted]="isEnchanted(offhandSlot)"
            (mouseenter)="getSlot(offhandSlot) && showTooltip($event, getSlot(offhandSlot)!)"
-           (mouseleave)="hideTooltip()">
+           (mouseleave)="hideTooltip()"
+           (click)="getSlot(offhandSlot) && toggleTooltip($event, getSlot(offhandSlot)!)">
         @if (getSlot(offhandSlot); as item) {
           <div class="item-icon"
                [ngStyle]="itemSpriteStyle(item.itemId)"
