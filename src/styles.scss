@@ -1,3 +1,12 @@
+:root {
+  --card-bg: rgba(20, 20, 20, 0.92);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #fff;
+  --text-secondary: #ccc;
+  --text-muted: #aaa;
+  --accent-green: #27ae60;
+}
+
 *,
 *::before,
 *::after {
@@ -16,4 +25,10 @@ body {
 
 a {
   color: inherit;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hover-only {
+    display: none !important;
+  }
 }

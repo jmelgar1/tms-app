@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 .chart-section {
   background: rgba(20, 20, 20, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -123,7 +125,11 @@
   }
 }
 
-@media (max-width: 600px) {
+@include bp.respond-to(mobile) {
+  .chart-section {
+    padding: 0.75rem 1rem;
+  }
+
   .bar-label {
     width: 100px;
     font-size: 0.8rem;
@@ -132,5 +138,25 @@
   .bar-value {
     width: 80px;
     font-size: 0.75rem;
+  }
+
+  .chart-bars.scrollable {
+    max-height: 300px;
+  }
+}
+
+@include bp.respond-to(small) {
+  .bar-label {
+    width: 80px;
+    font-size: 0.75rem;
+  }
+
+  .bar-value {
+    width: 60px;
+    font-size: 0.7rem;
+  }
+
+  .bar-row {
+    gap: 0.5rem;
   }
 }
