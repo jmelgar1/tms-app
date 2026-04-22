@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 .highlights {
   display: flex;
   gap: 1rem;
@@ -30,7 +32,7 @@
   font-weight: 600;
 }
 
-@media (max-width: 600px) {
+@include bp.respond-to(mobile) {
   .highlights {
     flex-direction: column;
   }

@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, HostListener, input, signal } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { PlayerInventoryResponse, InventorySlot } from '../../models/player-stats.model';
 import { SPRITE_MAP } from './sprite-map';
@@ -32,6 +32,16 @@ export class InventoryGrid {
 
   tooltipSlot = signal<InventorySlot | null>(null);
   tooltipPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+  private isTouchDevice = false;
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (!this.isTouchDevice) return;
+    const target = event.target as HTMLElement;
+    if (!target.closest('.inv-slot')) {
+      this.hideTooltip();
+    }
+  }
 
   getSlot(index: number): InventorySlot | undefined {
     return this.slotMap().get(index);
@@ -62,6 +72,21 @@ export class InventoryGrid {
 
   hideTooltip(): void {
     this.tooltipSlot.set(null);
+  }
+
+  toggleTooltip(event: Event, slot: InventorySlot): void {
+    this.isTouchDevice = true;
+    event.stopPropagation();
+    if (this.tooltipSlot() === slot) {
+      this.hideTooltip();
+      return;
+    }
+    const el = (event.target as HTMLElement).closest('.inv-slot') as HTMLElement;
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      this.tooltipSlot.set(slot);
+      this.tooltipPosition.set({ x: rect.left + rect.width / 2, y: rect.bottom });
+    }
   }
 
   formatItemName(slot: InventorySlot): string {
