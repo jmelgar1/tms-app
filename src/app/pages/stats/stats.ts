@@ -3,16 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
 import { PlayerStatsService } from '../../services/player-stats.service';
-import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse, PlayerInventoryResponse } from '../../models/player-stats.model';
+import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse, PlayerInventoryResponse, PlayerAdvancementsResponse } from '../../models/player-stats.model';
 import { PlayerHeader } from '../../components/player-header/player-header';
 import { StatHighlight } from '../../components/stat-highlight/stat-highlight';
 import { StatBarChart } from '../../components/stat-bar-chart/stat-bar-chart';
 import { StatComparisonModal } from '../../components/stat-comparison-modal/stat-comparison-modal';
+import { AchievementGrid } from '../../components/achievement-grid/achievement-grid';
 import { extractHeadlineStats, buildChartGroups, formatNumber } from '../../utils/stat-utils';
 
 @Component({
   selector: 'app-stats',
-  imports: [RouterLink, FormsModule, PlayerHeader, StatHighlight, StatBarChart, StatComparisonModal],
+  imports: [RouterLink, FormsModule, PlayerHeader, StatHighlight, StatBarChart, StatComparisonModal, AchievementGrid],
   templateUrl: './stats.html',
   styleUrl: './stats.scss',
 })
@@ -29,6 +30,7 @@ export class Stats implements OnInit {
   playerInfo = signal<PlayerInfoResponse | null>(null);
   playerRanks = signal<PlayerRanksResponse | null>(null);
   playerInventory = signal<PlayerInventoryResponse | null>(null);
+  playerAdvancements = signal<PlayerAdvancementsResponse | null>(null);
 
   // Server view
   serverStats = signal<ServerStatsResponse | null>(null);
@@ -108,6 +110,7 @@ export class Stats implements OnInit {
     this.playerInfo.set(null);
     this.playerRanks.set(null);
     this.playerInventory.set(null);
+    this.playerAdvancements.set(null);
 
     forkJoin({
       stats: this.statsService.getStatsByName(name),
@@ -116,12 +119,16 @@ export class Stats implements OnInit {
       inventory: this.statsService.getPlayerInventory(name).pipe(
         catchError(() => of(null))
       ),
+      advancements: this.statsService.getPlayerAdvancements(name).pipe(
+        catchError(() => of(null))
+      ),
     }).subscribe({
-      next: ({ stats, info, ranks, inventory }) => {
+      next: ({ stats, info, ranks, inventory, advancements }) => {
         this.statsResult.set(stats);
         this.playerInfo.set(info);
         this.playerRanks.set(ranks);
         this.playerInventory.set(inventory);
+        this.playerAdvancements.set(advancements);
         this.viewingPlayer.set(true);
         this.loading.set(false);
       },
@@ -152,6 +159,7 @@ export class Stats implements OnInit {
     this.playerInfo.set(null);
     this.playerRanks.set(null);
     this.playerInventory.set(null);
+    this.playerAdvancements.set(null);
     this.error.set(null);
     this.searchName = '';
   }

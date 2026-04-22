@@ -1,0 +1,208 @@
+@use 'breakpoints' as bp;
+
+.achievements-container {
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.achievements-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-family: inherit;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.achievements-label {
+  color: #aaa;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.achievements-count {
+  color: #ccc;
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+.toggle-icon {
+  color: #666;
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+
+  &.open {
+    transform: rotate(90deg);
+  }
+}
+
+.achievements-body {
+  padding: 0 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.achievement-category {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.category-progress {
+  color: #666;
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 40px);
+  gap: 3px;
+}
+
+.adv-slot {
+  width: 40px;
+  height: 40px;
+  background: rgba(60, 60, 60, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: border-color 0.15s;
+
+  &.locked {
+    opacity: 0.25;
+    filter: grayscale(1);
+  }
+
+  &.completed:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(80, 80, 80, 0.6);
+  }
+
+  &.completed.challenge {
+    border-bottom: 2px solid rgba(170, 0, 170, 0.6);
+  }
+
+  &.completed.goal {
+    border-bottom: 2px solid rgba(39, 174, 96, 0.6);
+  }
+}
+
+.adv-icon {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+// Tooltip
+.adv-tooltip {
+  position: fixed;
+  z-index: 100;
+  background: rgba(16, 0, 16, 0.94);
+  border: 1px solid #5000a0;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
+  pointer-events: none;
+  min-width: 150px;
+  max-width: 280px;
+}
+
+.tooltip-title {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+
+  &.challenge {
+    color: #cc00cc;
+  }
+}
+
+.tooltip-desc {
+  color: #aaa;
+  font-size: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.tooltip-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  &.completed {
+    color: #27ae60;
+  }
+
+  &.locked {
+    color: #666;
+  }
+}
+
+@include bp.respond-to(mobile) {
+  .achievements-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .achievements-body {
+    padding: 0 1rem 1rem;
+  }
+
+  .achievement-grid {
+    grid-template-columns: repeat(auto-fill, 36px);
+  }
+
+  .adv-slot {
+    width: 36px;
+    height: 36px;
+  }
+
+  .adv-icon {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@include bp.respond-to(small) {
+  .achievement-grid {
+    grid-template-columns: repeat(auto-fill, 30px);
+  }
+
+  .adv-slot {
+    width: 30px;
+    height: 30px;
+  }
+
+  .adv-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
