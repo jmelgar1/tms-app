@@ -148,7 +148,7 @@ h1 {
 
 .loading-toast {
   position: fixed;
-  bottom: 2rem;
+  bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   background: rgba(20, 20, 20, 0.95);
@@ -166,7 +166,7 @@ h1 {
 
 @include bp.respond-to(mobile) {
   .stats {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .search-form {
