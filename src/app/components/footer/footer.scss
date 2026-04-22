@@ -1,5 +1,5 @@
 .footer {
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px));
   background-color: #2d2d2d;
   color: #999;
   text-align: center;
