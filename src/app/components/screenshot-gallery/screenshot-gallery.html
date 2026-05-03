@@ -45,7 +45,7 @@
                     <span class="screenshot-caption">{{ screenshot.caption }}</span>
                   }
                 </div>
-                <span class="screenshot-date">{{ screenshot.uploadedAt | date:'mediumDate' }}</span>
+                <span class="screenshot-date">{{ screenshot.takenAt | date:'mediumDate' }}</span>
               </div>
             </div>
           }
@@ -55,7 +55,7 @@
 
     <div class="gallery-footer">
       <div class="gallery-counter">
-        {{ currentIndex() + 1 }} / {{ screenshots().length }}
+        {{ currentIndex() + 1 }} / {{ totalScreenshots() }}
       </div>
       <button class="upload-btn" (click)="onUploadClick()">Upload</button>
     </div>

@@ -3,7 +3,7 @@ export interface Screenshot {
   playerName: string;
   playerUuid: string;
   caption: string | null;
-  uploadedAt: string;
+  takenAt: string;
   imageUrl: string | null;
 }
 
