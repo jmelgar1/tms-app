@@ -9,23 +9,6 @@
       server hosting, maintenance, and future improvements.
     </p>
 
-    @if (donationInfo()?.stripe; as stripe) {
-      @if (stripe.available !== undefined) {
-        <div class="balance-section">
-          <div class="balance-item">
-            <span class="balance-label">Stripe Available</span>
-            <span class="balance-value">{{ stripe.available | currency }}</span>
-          </div>
-          @if (stripe.pending > 0) {
-            <div class="balance-item">
-              <span class="balance-label">Stripe Pending</span>
-              <span class="balance-value pending">{{ stripe.pending | currency }}</span>
-            </div>
-          }
-        </div>
-      }
-    }
-
     <div class="donate-benefits">
       <h2>What Your Donation Supports</h2>
       <ul>
@@ -33,14 +16,6 @@
         <li>Hardware upgrades and maintenance</li>
         <li>Website and domain costs</li>
       </ul>
-    </div>
-
-    <div class="stripe-button-container">
-      <stripe-buy-button
-        [attr.buy-button-id]="stripeConfig().buyButtonId"
-        [attr.publishable-key]="stripeConfig().publishableKey"
-      >
-      </stripe-buy-button>
     </div>
 
     <p class="donate-note">
