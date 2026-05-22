@@ -5,29 +5,31 @@
       <button class="close-btn" (click)="close()">&times;</button>
     </div>
 
-    <div class="section">
-      <h4 class="section-title">Server Contribution</h4>
-      <div class="contribution-stats">
-        <div class="contrib-row">
-          <span class="contrib-player">{{ viewedName() }}</span>
-          <span class="contrib-value">{{ viewedDisplayValue() }}</span>
+    @if (hasPlayer()) {
+      <div class="section">
+        <h4 class="section-title">Server Contribution</h4>
+        <div class="contribution-stats">
+          <div class="contrib-row">
+            <span class="contrib-player">{{ viewedName() }}</span>
+            <span class="contrib-value">{{ viewedDisplayValue() }}</span>
+          </div>
+          <div class="contrib-bar-track">
+            <div
+              class="contrib-bar-fill"
+              [style.width.%]="viewedPercentage()"
+              [style.background-color]="color()"
+            ></div>
+          </div>
+          <div class="contrib-row">
+            <span class="contrib-label">Server Total</span>
+            <span class="contrib-value">{{ formattedServerTotal() }}</span>
+          </div>
         </div>
-        <div class="contrib-bar-track">
-          <div
-            class="contrib-bar-fill"
-            [style.width.%]="viewedPercentage()"
-            [style.background-color]="color()"
-          ></div>
-        </div>
-        <div class="contrib-row">
-          <span class="contrib-label">Server Total</span>
-          <span class="contrib-value">{{ formattedServerTotal() }}</span>
-        </div>
+        <p class="percentage-text">
+          {{ viewedPercentage() | number:'1.1-1' }}% of server total
+        </p>
       </div>
-      <p class="percentage-text">
-        {{ viewedPercentage() | number:'1.1-1' }}% of server total
-      </p>
-    </div>
+    }
 
     <div class="section">
       <div class="section-header">

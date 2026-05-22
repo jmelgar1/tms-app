@@ -48,12 +48,14 @@ export class StatComparisonModal implements OnInit, OnDestroy {
     return entry ? entry.rank : null;
   });
 
+  hasPlayer = computed(() => this.viewedUuid() !== '');
+
   ngOnInit(): void {
     document.body.style.overflow = 'hidden';
 
     this.viewedName.set(this.playerName());
     this.viewedUuid.set(this.playerUuid());
-    this.viewedValue.set(this.stat().rawValue);
+    this.viewedValue.set(this.playerUuid() ? this.stat().rawValue : 0);
 
     const s = this.stat();
     this.statsService.getLeaderboard(s.category, s.statKey, 100).subscribe({

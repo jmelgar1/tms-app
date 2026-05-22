@@ -1,0 +1,78 @@
+<div class="table-section">
+  <div class="table-header">
+    <h3 class="table-title">{{ title() }}</h3>
+    <input
+      type="text"
+      class="filter-input"
+      placeholder="Filter..."
+      [value]="filterText()"
+      (input)="filterText.set($any($event.target).value)"
+    />
+  </div>
+  <div class="table-wrapper">
+    @if (scrollable() && canScrollUp()) {
+      <div class="scroll-indicator top">&#x2303;</div>
+    }
+    <div
+      class="table-body"
+      [class.scrollable]="scrollable()"
+      (scroll)="onScroll($event)"
+    >
+      <table>
+        <thead>
+          <tr>
+            <th class="col-stat" (click)="toggleSort('label')">
+              Statistic
+              <span class="sort-arrow" [class.active]="isSortActive('label')">{{ sortIndicator('label') }}</span>
+            </th>
+            <th class="col-value" (click)="toggleSort('rawValue')">
+              Value
+              <span class="sort-arrow" [class.active]="isSortActive('rawValue')">{{ sortIndicator('rawValue') }}</span>
+            </th>
+            @if (showRanks()) {
+              <th class="col-rank" (click)="toggleSort('rank')">
+                Ranking
+                <span class="sort-arrow" [class.active]="isSortActive('rank')">{{ sortIndicator('rank') }}</span>
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (stat of sortedStats(); track stat.statKey) {
+            <tr class="stat-row" (click)="statClicked.emit(stat)">
+              <td class="col-stat">{{ stat.label }}</td>
+              <td class="col-value">
+                <div class="value-cell">
+                  <div class="mini-bar-track">
+                    <div
+                      class="mini-bar-fill"
+                      [style.width.%]="stat.percentage"
+                      [style.background-color]="barColor()"
+                    ></div>
+                  </div>
+                  <span class="value-text">{{ stat.displayValue }}</span>
+                </div>
+              </td>
+              @if (showRanks()) {
+                <td class="col-rank">
+                  @if (stat.rank) {
+                    <span
+                      class="rank-badge"
+                      [style.background-color]="rankColor(stat.rank)"
+                      [style.color]="rankTextColor(stat.rank)"
+                    >
+                      #{{ stat.rank }}
+                    </span>
+                  }
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (scrollable() && canScrollDown()) {
+      <div class="scroll-indicator bottom">&#x2304;</div>
+    }
+  </div>
+</div>

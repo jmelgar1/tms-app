@@ -46,11 +46,12 @@
       }
 
       @for (group of chartGroups(); track group.title) {
-        <app-stat-bar-chart
+        <app-stat-table
           [title]="group.title"
           [stats]="group.stats"
           [barColor]="group.color"
           [scrollable]="group.scrollable ?? false"
+          [showRanks]="true"
           (statClicked)="onStatClicked($event, group.color)"
         />
       }
@@ -89,7 +90,7 @@
       }
 
       @for (group of chartGroups(); track group.title) {
-        <app-stat-bar-chart
+        <app-stat-table
           [title]="group.title"
           [stats]="group.stats"
           [barColor]="group.color"
@@ -102,16 +103,14 @@
 </div>
 
 @if (selectedStat(); as stat) {
-  @if (viewingPlayer() && playerInfo(); as info) {
-    <app-stat-comparison-modal
-      [stat]="stat"
-      [playerName]="info.name"
-      [playerUuid]="info.uuid"
-      [serverTotal]="selectedServerTotal()"
-      [color]="selectedColor()"
-      (closed)="closeModal()"
-    />
-  }
+  <app-stat-comparison-modal
+    [stat]="stat"
+    [playerName]="playerInfo()?.name ?? ''"
+    [playerUuid]="playerInfo()?.uuid ?? ''"
+    [serverTotal]="selectedServerTotal()"
+    [color]="selectedColor()"
+    (closed)="closeModal()"
+  />
 }
 
 @if (loading()) {

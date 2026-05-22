@@ -173,23 +173,22 @@ export function buildChartGroups(
     key: string;
     title: string;
     color: string;
-    scrollable: boolean;
   }[] = [
-    { key: 'minecraft:mined', title: 'Blocks Mined', color: CHART_COLORS.mined, scrollable: true },
-    { key: 'minecraft:crafted', title: 'Items Crafted', color: CHART_COLORS.crafted, scrollable: true },
-    { key: 'minecraft:used', title: 'Items Used', color: CHART_COLORS.used, scrollable: true },
-    { key: 'minecraft:broken', title: 'Items Broken', color: CHART_COLORS.broken, scrollable: true },
+    { key: 'minecraft:mined', title: 'Blocks Mined', color: CHART_COLORS.mined },
+    { key: 'minecraft:crafted', title: 'Items Crafted', color: CHART_COLORS.crafted },
+    { key: 'minecraft:used', title: 'Items Used', color: CHART_COLORS.used },
+    { key: 'minecraft:broken', title: 'Items Broken', color: CHART_COLORS.broken },
     // minecraft:killed_by is handled separately below to include environmental deaths
   ];
 
   for (const cat of categoryGroups) {
     const entries = stats[cat.key] ?? [];
     if (entries.length > 0) {
+      const displayStats = toDisplayStats(entries, v => formatNumber(v), cat.key, ranks?.[cat.key]);
       groups.push({
         title: cat.title,
-        stats: toDisplayStats(entries, v => formatNumber(v), cat.key, ranks?.[cat.key]),
+        stats: displayStats,
         color: cat.color,
-        scrollable: cat.scrollable,
       });
     }
   }
@@ -211,6 +210,10 @@ export function buildChartGroups(
       stats: toDisplayStats(deathEntries, v => formatNumber(v), 'minecraft:killed_by', ranks?.['minecraft:killed_by']),
       color: CHART_COLORS.killedBy,
     });
+  }
+
+  for (const group of groups) {
+    group.scrollable = group.stats.length > 10;
   }
 
   return groups;

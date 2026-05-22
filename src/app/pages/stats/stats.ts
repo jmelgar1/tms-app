@@ -6,14 +6,14 @@ import { PlayerStatsService } from '../../services/player-stats.service';
 import { PlayerStatsResponse, PlayerInfoResponse, ServerStatsResponse, LeaderboardEntry, DisplayStat, PlayerRanksResponse, PlayerInventoryResponse, PlayerAdvancementsResponse } from '../../models/player-stats.model';
 import { PlayerHeader } from '../../components/player-header/player-header';
 import { StatHighlight } from '../../components/stat-highlight/stat-highlight';
-import { StatBarChart } from '../../components/stat-bar-chart/stat-bar-chart';
+import { StatTable } from '../../components/stat-table/stat-table';
 import { StatComparisonModal } from '../../components/stat-comparison-modal/stat-comparison-modal';
 import { AchievementGrid } from '../../components/achievement-grid/achievement-grid';
 import { extractHeadlineStats, buildChartGroups, formatNumber } from '../../utils/stat-utils';
 
 @Component({
   selector: 'app-stats',
-  imports: [RouterLink, FormsModule, PlayerHeader, StatHighlight, StatBarChart, StatComparisonModal, AchievementGrid],
+  imports: [RouterLink, FormsModule, PlayerHeader, StatHighlight, StatTable, StatComparisonModal, AchievementGrid],
   templateUrl: './stats.html',
   styleUrl: './stats.scss',
 })
@@ -144,7 +144,6 @@ export class Stats implements OnInit {
   }
 
   onStatClicked(stat: DisplayStat, color: string): void {
-    if (!this.viewingPlayer()) return;
     this.selectedStat.set(stat);
     this.selectedColor.set(color);
   }
