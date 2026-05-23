@@ -116,10 +116,23 @@ thead th {
     color: #ccc;
     font-size: 0.85rem;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
   }
+}
+
+.stat-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
 }
 
 .value-cell {
@@ -223,6 +236,11 @@ thead th {
 
   .stat-row .col-stat {
     font-size: 0.8rem;
+  }
+
+  .stat-icon {
+    width: 18px;
+    height: 18px;
   }
 
   .col-rank {

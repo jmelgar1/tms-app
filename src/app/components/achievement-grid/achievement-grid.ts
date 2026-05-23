@@ -2,8 +2,7 @@ import { Component, computed, HostListener, input, signal } from '@angular/core'
 import { NgStyle } from '@angular/common';
 import { PlayerAdvancementsResponse, AdvancementEntry } from '../../models/player-stats.model';
 import { SPRITE_MAP } from '../inventory-grid/sprite-map';
-
-const SPRITESHEET_URL = 'https://pub-7cdebf4e8e6a4b16a846ef6af6dd72ae.r2.dev/inventory/items-spritesheet.png';
+import { environment } from '../../../environments/environment';
 const TILE_SIZE = 64;
 const GRID_SIZE = 39;
 
@@ -92,7 +91,7 @@ export class AchievementGrid {
     const col = pos.x / TILE_SIZE;
     const row = pos.y / TILE_SIZE;
     return {
-      'background-image': `url(${SPRITESHEET_URL})`,
+      'background-image': `url(${environment.itemSpritesheetUrl})`,
       'background-size': `${GRID_SIZE * 100}% ${GRID_SIZE * 100}%`,
       'background-position': `${col * 100 / (GRID_SIZE - 1)}% ${row * 100 / (GRID_SIZE - 1)}%`,
     };

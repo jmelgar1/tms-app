@@ -40,7 +40,12 @@
         <tbody>
           @for (stat of sortedStats(); track stat.statKey) {
             <tr class="stat-row" (click)="statClicked.emit(stat)">
-              <td class="col-stat">{{ stat.label }}</td>
+              <td class="col-stat">
+                @if (itemSpriteStyle(stat); as style) {
+                  <span class="stat-icon" [ngStyle]="style"></span>
+                }
+                <span class="stat-label">{{ stat.label }}</span>
+              </td>
               <td class="col-value">
                 <div class="value-cell">
                   <div class="mini-bar-track">
