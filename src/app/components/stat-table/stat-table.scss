@@ -87,7 +87,6 @@ thead th {
 
 .col-stat {
   text-align: left;
-  width: 40%;
 }
 
 .col-value {
@@ -115,18 +114,13 @@ thead th {
   .col-stat {
     color: #ccc;
     font-size: 0.85rem;
-    white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    min-width: 0;
   }
 }
 
-.stat-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.stat-label {}
 
 .stat-icon {
   width: 20px;
@@ -242,7 +236,7 @@ thead th {
   }
 
   .mini-bar-track {
-    display: none;
+    min-width: 20px;
   }
 
   .value-text {
