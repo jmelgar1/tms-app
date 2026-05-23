@@ -5,7 +5,8 @@ import { DisplayStat } from '../models/player-stats.model';
 
 const TILE_SIZE = 64;
 const ITEM_GRID_SIZE = 39;
-const CUSTOM_GRID_SIZE = 8;
+const CUSTOM_GRID_COLS = 8;
+const CUSTOM_GRID_ROWS = 7;
 
 const VERB_PREFIXES = [
   'interact_with_', 'inspect_', 'open_', 'play_', 'tune_',
@@ -124,8 +125,8 @@ export function statSpriteStyle(stat: DisplayStat): Record<string, string> | nul
     const row = customPos.y / TILE_SIZE;
     return {
       'background-image': `url(${environment.customSpritesheetUrl})`,
-      'background-size': `${CUSTOM_GRID_SIZE * 100}% ${CUSTOM_GRID_SIZE * 100}%`,
-      'background-position': `${col * 100 / (CUSTOM_GRID_SIZE - 1)}% ${row * 100 / (CUSTOM_GRID_SIZE - 1)}%`,
+      'background-size': `${CUSTOM_GRID_COLS * 100}% ${CUSTOM_GRID_ROWS * 100}%`,
+      'background-position': `${col * 100 / (CUSTOM_GRID_COLS - 1)}% ${row * 100 / (CUSTOM_GRID_ROWS - 1)}%`,
     };
   }
 
