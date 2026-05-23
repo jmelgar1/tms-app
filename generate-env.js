@@ -5,6 +5,8 @@ const content = `export const environment = {
   bluemapUrl: '${process.env.bluemapUrl}',
   statusApiBase: '${process.env.statusApiBase}',
   tmsApiBase: '${process.env.tmsApiBase}',
+  itemSpritesheetUrl: '${process.env.itemSpritesheetUrl}',
+  customSpritesheetUrl: '${process.env.customSpritesheetUrl}',
 };
 `;
 
