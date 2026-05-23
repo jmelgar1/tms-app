@@ -10,12 +10,12 @@
     />
   </div>
   <div class="table-wrapper">
-    @if (scrollable() && canScrollUp()) {
-      <div class="scroll-indicator top">&#x2303;</div>
+    @if (isScrollable()) {
+      <div class="scroll-indicator top" [class.visible]="canScrollUp()"><img src="assets/buttons/chevron-up.svg" alt="" /></div>
     }
     <div
       class="table-body"
-      [class.scrollable]="scrollable()"
+      [class.scrollable]="isScrollable()"
       (scroll)="onScroll($event)"
     >
       <table>
@@ -76,8 +76,8 @@
         </tbody>
       </table>
     </div>
-    @if (scrollable() && canScrollDown()) {
-      <div class="scroll-indicator bottom">&#x2304;</div>
+    @if (isScrollable()) {
+      <div class="scroll-indicator bottom" [class.visible]="canScrollDown()"><img src="assets/buttons/chevron-down.svg" alt="" /></div>
     }
   </div>
 </div>

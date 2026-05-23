@@ -49,6 +49,19 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-stat-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
 .modal-title {
   color: #fff;
   font-size: 1.25rem;

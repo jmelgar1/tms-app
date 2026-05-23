@@ -38,6 +38,9 @@ const numberFormatter = new Intl.NumberFormat('en-US');
 
 export function ticksToDaysHours(ticks: number): string {
   const totalSeconds = Math.floor(ticks / 20);
+  if (totalSeconds < 60) return `${totalSeconds} seconds`;
+  if (totalSeconds < 3600) return `${(totalSeconds / 60).toFixed(1)} minutes`;
+  if (totalSeconds < 86400) return `${(totalSeconds / 3600).toFixed(1)} hours`;
   const days = totalSeconds / 86400;
   return `${days.toFixed(2)} days`;
 }

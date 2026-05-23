@@ -1,7 +1,12 @@
 <div class="modal-backdrop" (click)="onBackdropClick($event)">
   <div class="modal-panel">
     <div class="modal-header">
-      <h3 class="modal-title">{{ stat().label }}</h3>
+      <div class="modal-title-row">
+        @if (iconStyle(); as style) {
+          <span class="modal-stat-icon" [ngStyle]="style"></span>
+        }
+        <h3 class="modal-title">{{ stat().label }}</h3>
+      </div>
       <button class="close-btn" (click)="close()">&times;</button>
     </div>
 
@@ -26,7 +31,7 @@
           </div>
         </div>
         <p class="percentage-text">
-          {{ viewedPercentage() | number:'1.1-1' }}% of server total
+          {{ percentageDisplay() }} of server total
         </p>
       </div>
     }

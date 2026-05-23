@@ -1,44 +1,7 @@
 import { Component, input, output, signal, computed } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { DisplayStat } from '../../models/player-stats.model';
-import { SPRITE_MAP } from '../inventory-grid/sprite-map';
-import { CUSTOM_SPRITE_MAP } from './custom-sprite-map';
-import { environment } from '../../../environments/environment';
-
-const TILE_SIZE = 64;
-const ITEM_GRID_SIZE = 39;
-const CUSTOM_GRID_SIZE = 7;
-
-const VERB_PREFIXES = [
-  'interact_with_', 'inspect_', 'open_', 'play_', 'tune_',
-  'fill_', 'use_', 'eat_', 'clean_',
-];
-
-// Stats where the block name can't be derived from the stat key
-const CUSTOM_STAT_OVERRIDES: Record<string, string> = {
-  'pot_flower': 'flower_pot',
-  'enchant_item': 'enchanting_table',
-  'sleep_in_bed': 'white_bed',
-  'clean_armor': 'cauldron',
-  'clean_banner': 'cauldron',
-  'boat_one_cm': 'oak_boat',
-  'minecart_one_cm': 'minecart',
-  'strider_one_cm': 'warped_fungus_on_a_stick',
-  'play_record': 'music_disc_cat',
-  'fish_caught': 'cooked_cod',
-  'damage_blocked_by_shield': 'shield',
-};
-
-// Build a reverse lookup: underscore-collapsed sprite name → original sprite key
-// e.g. "brewingstand" → "brewing_stand" so we can match Minecraft's merged names
-const COLLAPSED_SPRITE_KEYS = new Map<string, string>();
-for (const key of Object.keys(SPRITE_MAP)) {
-  const stripped = key.replace('minecraft_', '');
-  const collapsed = stripped.replace(/_/g, '');
-  if (collapsed !== stripped) {
-    COLLAPSED_SPRITE_KEYS.set(collapsed, stripped);
-  }
-}
+import { statSpriteStyle } from '../../utils/sprite-utils';
 
 type SortColumn = 'label' | 'rawValue' | 'rank';
 type SortDirection = 'asc' | 'desc';
@@ -65,6 +28,8 @@ export class StatTable {
 
   canScrollUp = signal(false);
   canScrollDown = signal(true);
+
+  isScrollable = computed(() => this.scrollable() && this.sortedStats().length > 10);
 
   sortedStats = computed(() => {
     const col = this.sortColumn();
@@ -131,81 +96,6 @@ export class StatTable {
   }
 
   itemSpriteStyle(stat: DisplayStat): Record<string, string> | null {
-    // Check custom sprite map first (keyed by display label with underscores)
-    const customKey = stat.label.replace(/ /g, '_');
-    const customPos = CUSTOM_SPRITE_MAP[customKey];
-    if (customPos) {
-      const col = customPos.x / TILE_SIZE;
-      const row = customPos.y / TILE_SIZE;
-      return {
-        'background-image': `url(${environment.customSpritesheetUrl})`,
-        'background-size': `${CUSTOM_GRID_SIZE * 100}% ${CUSTOM_GRID_SIZE * 100}%`,
-        'background-position': `${col * 100 / (CUSTOM_GRID_SIZE - 1)}% ${row * 100 / (CUSTOM_GRID_SIZE - 1)}%`,
-      };
-    }
-
-    // Fall back to item sprite map (keyed by minecraft item ID)
-    const resolved = this.resolveItemKey(stat.statKey);
-    if (!resolved) return null;
-    const pos = SPRITE_MAP[resolved];
-    if (!pos) return null;
-    const col = pos.x / TILE_SIZE;
-    const row = pos.y / TILE_SIZE;
-    return {
-      'background-image': `url(${environment.itemSpritesheetUrl})`,
-      'background-size': `${ITEM_GRID_SIZE * 100}% ${ITEM_GRID_SIZE * 100}%`,
-      'background-position': `${col * 100 / (ITEM_GRID_SIZE - 1)}% ${row * 100 / (ITEM_GRID_SIZE - 1)}%`,
-    };
-  }
-
-  private resolveItemKey(statKey: string): string | null {
-    // Direct match: works for mined/crafted/used/broken categories
-    // e.g. "minecraft:diamond_ore" → "minecraft_diamond_ore"
-    const direct = statKey.replace(':', '_');
-    if (SPRITE_MAP[direct]) return direct;
-
-    const bare = statKey.replace(/^minecraft:/, '');
-
-    // Manual overrides for irregular stats
-    const override = CUSTOM_STAT_OVERRIDES[bare];
-    if (override) {
-      const key = `minecraft_${override}`;
-      if (SPRITE_MAP[key]) return key;
-    }
-
-    // Strip verb prefixes: "interact_with_anvil" → "anvil"
-    let candidate = bare;
-    for (const prefix of VERB_PREFIXES) {
-      if (bare.startsWith(prefix)) {
-        candidate = bare.slice(prefix.length);
-        break;
-      }
-    }
-
-    // Try direct lookup with candidate
-    const candidateKey = `minecraft_${candidate}`;
-    if (SPRITE_MAP[candidateKey]) return candidateKey;
-
-    // Try underscore-collapsed matching for merged names
-    // e.g. "noteblock" → matches "note_block", "enderchest" → "ender_chest"
-    const collapsed = candidate.replace(/_/g, '');
-    const resolved = COLLAPSED_SPRITE_KEYS.get(collapsed);
-    if (resolved) {
-      const key = `minecraft_${resolved}`;
-      if (SPRITE_MAP[key]) return key;
-    }
-
-    // Try dropping trailing words from the prefix-stripped candidate:
-    // "cake_slice" → "cake", and from the full bare key: "bell_ring" → "bell"
-    for (const source of [candidate, bare]) {
-      const parts = source.split('_');
-      for (let len = parts.length - 1; len >= 1; len--) {
-        const sub = parts.slice(0, len).join('_');
-        const subKey = `minecraft_${sub}`;
-        if (SPRITE_MAP[subKey]) return subKey;
-      }
-    }
-
-    return null;
+    return statSpriteStyle(stat);
   }
 }

@@ -181,23 +181,39 @@ thead th {
   right: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
   z-index: 2;
   pointer-events: none;
-  color: #aaa;
-  font-size: 1.25rem;
-  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(40, 40, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 0 auto;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  img {
+    width: 12px;
+    height: 12px;
+    filter: brightness(0) invert(0.8);
+  }
 
   &.top {
-    top: -2px;
+    top: -11px;
   }
 
   &.bottom {
-    bottom: -2px;
+    bottom: -11px;
   }
 }
 
 .table-body.scrollable {
-  max-height: 400px;
+  max-height: 326px;
   overflow-y: auto;
   padding-right: 0.5rem;
 
@@ -253,7 +269,7 @@ thead th {
   }
 
   .table-body.scrollable {
-    max-height: 300px;
+    max-height: 260px;
   }
 }
 

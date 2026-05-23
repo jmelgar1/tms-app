@@ -1,12 +1,13 @@
 import { Component, input, output, inject, signal, computed, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { NgStyle } from '@angular/common';
 import { PlayerStatsService } from '../../services/player-stats.service';
 import { DisplayStat, LeaderboardEntry } from '../../models/player-stats.model';
 import { formatStatValue } from '../../utils/stat-utils';
+import { statSpriteStyle } from '../../utils/sprite-utils';
 
 @Component({
   selector: 'app-stat-comparison-modal',
-  imports: [DecimalPipe],
+  imports: [NgStyle],
   templateUrl: './stat-comparison-modal.html',
   styleUrl: './stat-comparison-modal.scss',
 })
@@ -50,6 +51,17 @@ export class StatComparisonModal implements OnInit, OnDestroy {
 
   hasPlayer = computed(() => this.viewedUuid() !== '');
 
+  percentageDisplay = computed(() => {
+    const pct = this.viewedPercentage();
+    if (pct === 0) return '0%';
+    if (pct < 0.01) return '< 0.01%';
+    if (pct < 0.1) return `${pct.toFixed(2)}%`;
+    if (pct < 1) return `${pct.toFixed(1)}%`;
+    return `${Math.round(pct)}%`;
+  });
+
+  iconStyle = computed(() => statSpriteStyle(this.stat()));
+
   ngOnInit(): void {
     document.body.style.overflow = 'hidden';
 
@@ -62,6 +74,13 @@ export class StatComparisonModal implements OnInit, OnDestroy {
       next: (data) => {
         this.leaderboard.set(data.entries);
         this.leaderboardLoading.set(false);
+        // If no player was provided (server stats view), select the #1 player
+        if (!this.viewedUuid() && data.entries.length > 0) {
+          const top = data.entries[0];
+          this.viewedName.set(top.name);
+          this.viewedUuid.set(top.uuid);
+          this.viewedValue.set(top.value);
+        }
       },
       error: () => {
         this.leaderboardError.set(true);
