@@ -50,6 +50,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 thead th {
@@ -87,6 +88,7 @@ thead th {
 
 .col-stat {
   text-align: left;
+  width: 50%;
 }
 
 .col-value {
