@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { formatNumber } from '../../utils/stat-utils';
 
 @Component({
@@ -9,6 +9,8 @@ import { formatNumber } from '../../utils/stat-utils';
 export class StatHighlight {
   playtime = input.required<string>();
   deaths = input.required<number>();
+
+  highlightClicked = output<'playtime' | 'deaths'>();
 
   formattedDeaths(): string {
     return formatNumber(this.deaths());

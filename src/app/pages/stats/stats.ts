@@ -9,7 +9,7 @@ import { StatHighlight } from '../../components/stat-highlight/stat-highlight';
 import { StatTable } from '../../components/stat-table/stat-table';
 import { StatComparisonModal } from '../../components/stat-comparison-modal/stat-comparison-modal';
 import { AchievementGrid } from '../../components/achievement-grid/achievement-grid';
-import { extractHeadlineStats, buildChartGroups, formatNumber } from '../../utils/stat-utils';
+import { extractHeadlineStats, buildChartGroups, formatNumber, ticksToDaysHours } from '../../utils/stat-utils';
 
 @Component({
   selector: 'app-stats',
@@ -158,6 +158,30 @@ export class Stats implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  onHighlightClicked(type: 'playtime' | 'deaths'): void {
+    const stats = this.viewingPlayer() ? this.statsResult()?.stats : this.serverStats()?.stats;
+    if (!stats) return;
+    const custom = stats['minecraft:custom'] ?? [];
+    const statKey = type === 'playtime' ? 'minecraft:play_time' : 'minecraft:deaths';
+    const entry = custom.find(e => e.stat === statKey);
+    if (!entry) return;
+
+    const ranks = this.viewingPlayer() ? this.playerRanks()?.ranks?.['minecraft:custom'] : undefined;
+    const rank = ranks?.find(r => r.stat === statKey)?.rank;
+
+    const displayStat: DisplayStat = {
+      label: type === 'playtime' ? 'Playtime' : 'Deaths',
+      rawValue: entry.value,
+      displayValue: type === 'playtime' ? ticksToDaysHours(entry.value) : formatNumber(entry.value),
+      percentage: 100,
+      statKey,
+      category: 'minecraft:custom',
+      rank,
+    };
+
+    this.onStatClicked(displayStat, type === 'playtime' ? '#3498db' : '#e74c3c');
   }
 
   onStatClicked(stat: DisplayStat, color: string): void {

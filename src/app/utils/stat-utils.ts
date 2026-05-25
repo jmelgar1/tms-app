@@ -21,7 +21,7 @@ const DAMAGE_STATS = new Set([
 
 const EXCLUDED_STATS = new Set(['play_time', 'deaths', 'total_world_time', 'aviate_one_cm']);
 
-const TIME_STATS = new Set(['time_since_death', 'time_since_rest', 'sneak_time']);
+const TIME_STATS = new Set(['play_time', 'time_since_death', 'time_since_rest', 'sneak_time']);
 
 const CHART_COLORS = {
   movement: '#27ae60',

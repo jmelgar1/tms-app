@@ -1,9 +1,9 @@
 <div class="highlights">
-  <div class="highlight-card">
+  <div class="highlight-card" (click)="highlightClicked.emit('playtime')">
     <span class="highlight-label">Playtime</span>
     <span class="highlight-value">{{ playtime() }}</span>
   </div>
-  <div class="highlight-card">
+  <div class="highlight-card" (click)="highlightClicked.emit('deaths')">
     <span class="highlight-label">Deaths</span>
     <span class="highlight-value">{{ formattedDeaths() }}</span>
   </div>
