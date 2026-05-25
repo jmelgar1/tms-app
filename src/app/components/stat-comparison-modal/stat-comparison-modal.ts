@@ -57,7 +57,10 @@ export class StatComparisonModal implements OnInit, OnDestroy {
     if (pct < 0.01) return '< 0.01%';
     if (pct < 0.1) return `${pct.toFixed(2)}%`;
     if (pct < 1) return `${pct.toFixed(1)}%`;
-    return `${Math.round(pct)}%`;
+    if (pct >= 100) return '100%';
+    const rounded = Math.round(pct);
+    if (rounded >= 100) return '99.99%';
+    return `${rounded}%`;
   });
 
   iconStyle = computed(() => statSpriteStyle(this.stat()));
