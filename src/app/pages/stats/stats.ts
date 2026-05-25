@@ -45,6 +45,9 @@ export class Stats implements OnInit {
   selectedStat = signal<DisplayStat | null>(null);
   selectedColor = signal<string>('#27ae60');
 
+  // Global stat search
+  globalStatSearch = signal('');
+
   headlines = computed(() => {
     const stats = this.viewingPlayer() ? this.statsResult()?.stats : this.serverStats()?.stats;
     if (!stats) return null;
@@ -56,6 +59,19 @@ export class Stats implements OnInit {
     if (!stats) return [];
     const ranks = this.viewingPlayer() ? this.playerRanks()?.ranks : undefined;
     return buildChartGroups(stats, ranks);
+  });
+
+  filteredChartGroups = computed(() => {
+    const query = this.globalStatSearch().toLowerCase().trim();
+    const groups = this.chartGroups();
+    if (!query) return groups;
+
+    return groups
+      .map(group => {
+        const filtered = group.stats.filter(s => s.label.toLowerCase().includes(query));
+        return { ...group, stats: filtered, scrollable: filtered.length > 10 };
+      })
+      .filter(group => group.stats.length > 0);
   });
 
   serverPlayerCount = computed(() => {
@@ -106,6 +122,7 @@ export class Stats implements OnInit {
 
     this.loading.set(true);
     this.error.set(null);
+    this.globalStatSearch.set('');
     this.statsResult.set(null);
     this.playerInfo.set(null);
     this.playerRanks.set(null);
@@ -160,6 +177,7 @@ export class Stats implements OnInit {
     this.playerInventory.set(null);
     this.playerAdvancements.set(null);
     this.error.set(null);
+    this.globalStatSearch.set('');
     this.searchName = '';
   }
 

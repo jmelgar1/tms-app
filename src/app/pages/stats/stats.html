@@ -45,7 +45,24 @@
         <app-achievement-grid [advancements]="advData" />
       }
 
-      @for (group of chartGroups(); track group.title) {
+      <div class="stat-search">
+        <input
+          type="text"
+          class="stat-search-input"
+          placeholder="Search all stats..."
+          [value]="globalStatSearch()"
+          (input)="globalStatSearch.set($any($event.target).value)"
+        />
+        @if (globalStatSearch()) {
+          <button class="stat-search-clear" (click)="globalStatSearch.set('')">&times;</button>
+        }
+      </div>
+
+      @if (filteredChartGroups().length === 0 && globalStatSearch()) {
+        <p class="no-results">No stats matching "{{ globalStatSearch() }}"</p>
+      }
+
+      @for (group of filteredChartGroups(); track group.title) {
         <app-stat-table
           [title]="group.title"
           [stats]="group.stats"
@@ -89,7 +106,24 @@
         />
       }
 
-      @for (group of chartGroups(); track group.title) {
+      <div class="stat-search">
+        <input
+          type="text"
+          class="stat-search-input"
+          placeholder="Search all stats..."
+          [value]="globalStatSearch()"
+          (input)="globalStatSearch.set($any($event.target).value)"
+        />
+        @if (globalStatSearch()) {
+          <button class="stat-search-clear" (click)="globalStatSearch.set('')">&times;</button>
+        }
+      </div>
+
+      @if (filteredChartGroups().length === 0 && globalStatSearch()) {
+        <p class="no-results">No stats matching "{{ globalStatSearch() }}"</p>
+      }
+
+      @for (group of filteredChartGroups(); track group.title) {
         <app-stat-table
           [title]="group.title"
           [stats]="group.stats"
