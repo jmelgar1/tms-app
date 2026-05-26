@@ -264,11 +264,21 @@ thead th {
     padding: 0.75rem 1rem;
   }
 
+  table {
+    table-layout: auto;
+  }
+
+  .col-stat {
+    width: auto;
+    white-space: nowrap;
+  }
+
   .mini-bar-track {
     min-width: 20px;
   }
 
   .value-text {
+    width: 95px;
     min-width: auto;
     font-size: 0.75rem;
   }
@@ -302,6 +312,7 @@ thead th {
   }
 
   .value-text {
+    width: 80px;
     font-size: 0.7rem;
   }
 
