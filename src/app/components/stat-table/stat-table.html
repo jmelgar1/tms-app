@@ -68,7 +68,7 @@
                       ></div>
                     }
                   </div>
-                  <span class="value-text">{{ stat.displayValue }}</span>
+                  <span class="value-text">{{ stat.displayValue }}@if (isHeartsStat(stat)) { <span class="heart-icon" [ngStyle]="heartStyle"></span>}@if (isBlocksStat(stat)) {<span class="unit-full"> blocks</span><span class="unit-short"> m</span>}</span>
                 </div>
               </td>
               @if (showRanks()) {

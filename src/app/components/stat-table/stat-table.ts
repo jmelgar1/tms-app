@@ -1,7 +1,8 @@
 import { Component, input, output, signal, computed } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { DisplayStat } from '../../models/player-stats.model';
-import { statSpriteStyle } from '../../utils/sprite-utils';
+import { statSpriteStyle, heartSpriteStyle } from '../../utils/sprite-utils';
+import { isDamageStat, isMovementStat } from '../../utils/stat-utils';
 
 type SortColumn = 'label' | 'rawValue' | 'rank';
 type SortDirection = 'asc' | 'desc';
@@ -93,6 +94,16 @@ export class StatTable {
     const el = event.target as HTMLElement;
     this.canScrollUp.set(el.scrollTop > 0);
     this.canScrollDown.set(el.scrollTop + el.clientHeight < el.scrollHeight - 1);
+  }
+
+  heartStyle = heartSpriteStyle();
+
+  isHeartsStat(stat: DisplayStat): boolean {
+    return isDamageStat(stat.statKey);
+  }
+
+  isBlocksStat(stat: DisplayStat): boolean {
+    return isMovementStat(stat.statKey);
   }
 
   itemSpriteStyle(stat: DisplayStat): Record<string, string> | null {

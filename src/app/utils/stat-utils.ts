@@ -54,7 +54,15 @@ export function ticksToDaysHours(ticks: number): string {
 }
 
 export function cmToDistance(cm: number): string {
-  return `${numberFormatter.format(Math.round(cm / 100))} blocks`;
+  return numberFormatter.format(Math.round(cm / 100));
+}
+
+export function isMovementStat(statKey: string): boolean {
+  return statKey.replace(/^minecraft:/, '').endsWith('_one_cm');
+}
+
+export function isDamageStat(statKey: string): boolean {
+  return DAMAGE_STATS.has(statKey.replace(/^minecraft:/, ''));
 }
 
 export function formatStatName(stat: string): string {
@@ -80,7 +88,7 @@ function statKey(stat: string): string {
 export function formatStatValue(statKey: string, value: number): string {
   const key = statKey.replace(/^minecraft:/, '');
   if (key.endsWith('_one_cm')) return cmToDistance(value);
-  if (DAMAGE_STATS.has(key)) return `${formatNumber(Math.round(value / 2))} hearts`;
+  if (DAMAGE_STATS.has(key)) return formatNumber(Math.round(value / 2));
   if (TIME_STATS.has(key)) return ticksToDaysHours(value);
   return formatNumber(value);
 }
@@ -211,7 +219,7 @@ export function buildChartGroups(
       title: 'Combat',
       stats: toDisplayStats(combatEntries, (v, stat) => {
         if (DAMAGE_STATS.has(statKey(stat))) {
-          return `${formatNumber(Math.round(v / 2))} hearts`;
+          return formatNumber(Math.round(v / 2));
         }
         return formatNumber(v);
       }, 'minecraft:custom', ranks?.['minecraft:custom'], segmentOptions),

@@ -180,6 +180,29 @@
   text-align: center;
 }
 
+.heart-icon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  vertical-align: middle;
+  margin-left: 2px;
+  image-rendering: pixelated;
+}
+
+.unit-short {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .unit-full {
+    display: none;
+  }
+
+  .unit-short {
+    display: inline;
+  }
+}
+
 // Leaderboard Section
 
 .leaderboard-list {

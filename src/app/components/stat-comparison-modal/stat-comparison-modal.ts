@@ -2,8 +2,8 @@ import { Component, input, output, inject, signal, computed, OnInit, OnDestroy, 
 import { NgStyle } from '@angular/common';
 import { PlayerStatsService } from '../../services/player-stats.service';
 import { DisplayStat, LeaderboardEntry } from '../../models/player-stats.model';
-import { formatStatValue } from '../../utils/stat-utils';
-import { statSpriteStyle } from '../../utils/sprite-utils';
+import { formatStatValue, isDamageStat, isMovementStat } from '../../utils/stat-utils';
+import { statSpriteStyle, heartSpriteStyle } from '../../utils/sprite-utils';
 
 @Component({
   selector: 'app-stat-comparison-modal',
@@ -107,6 +107,10 @@ export class StatComparisonModal implements OnInit, OnDestroy {
   close(): void {
     this.closed.emit();
   }
+
+  heartStyle = heartSpriteStyle();
+  isHearts = computed(() => isDamageStat(this.stat().statKey));
+  isBlocks = computed(() => isMovementStat(this.stat().statKey));
 
   formatValue(value: number): string {
     return formatStatValue(this.stat().statKey, value);

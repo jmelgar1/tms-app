@@ -16,7 +16,7 @@
         <div class="contribution-stats">
           <div class="contrib-row">
             <span class="contrib-player">{{ viewedName() }}</span>
-            <span class="contrib-value">{{ viewedDisplayValue() }}</span>
+            <span class="contrib-value">{{ viewedDisplayValue() }}@if (isHearts()) { <span class="heart-icon" [ngStyle]="heartStyle"></span>}@if (isBlocks()) {<span class="unit-full"> blocks</span><span class="unit-short"> m</span>}</span>
           </div>
           <div class="contrib-bar-track">
             <div
@@ -24,14 +24,16 @@
               [style.width.%]="viewedPercentage()"
               [style.background-color]="viewedColor()"
             ></div>
-            <div
-              class="contrib-bar-fill contrib-bar-rest"
-              [style.width.%]="100 - viewedPercentage()"
-            ></div>
+            @if (viewedPercentage() < 100) {
+              <div
+                class="contrib-bar-fill contrib-bar-rest"
+                [style.width.%]="100 - viewedPercentage()"
+              ></div>
+            }
           </div>
           <div class="contrib-row">
             <span class="contrib-label">Server Total</span>
-            <span class="contrib-value">{{ formattedServerTotal() }}</span>
+            <span class="contrib-value">{{ formattedServerTotal() }}@if (isHearts()) { <span class="heart-icon" [ngStyle]="heartStyle"></span>}@if (isBlocks()) {<span class="unit-full"> blocks</span><span class="unit-short"> m</span>}</span>
           </div>
         </div>
         <p class="percentage-text">
@@ -72,7 +74,7 @@
                   [style.background-color]="entryColor(entry)"
                 ></div>
               </div>
-              <span class="lb-value">{{ formatValue(entry.value) }}</span>
+              <span class="lb-value">{{ formatValue(entry.value) }}@if (isHearts()) { <span class="heart-icon" [ngStyle]="heartStyle"></span>}@if (isBlocks()) {<span class="unit-full"> blocks</span><span class="unit-short"> m</span>}</span>
             </div>
           }
         </div>

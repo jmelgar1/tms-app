@@ -53,4 +53,5 @@ export const CUSTOM_SPRITE_MAP: Record<string, { x: number; y: number }> = {
   "Walk": { x: 0, y: 384 },
   "Walk_On_Water": { x: 64, y: 384 },
   "Walk_Under_Water": { x: 128, y: 384 },
+  "Heart": { x: 192, y: 384 },
 };

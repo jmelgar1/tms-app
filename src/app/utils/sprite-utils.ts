@@ -116,6 +116,17 @@ function resolveItemKey(statKey: string): string | null {
   return null;
 }
 
+export function heartSpriteStyle(): Record<string, string> {
+  const pos = CUSTOM_SPRITE_MAP['Heart'];
+  const col = pos.x / TILE_SIZE;
+  const row = pos.y / TILE_SIZE;
+  return {
+    'background-image': `url(${environment.customSpritesheetUrl})`,
+    'background-size': `${CUSTOM_GRID_COLS * 100}% ${CUSTOM_GRID_ROWS * 100}%`,
+    'background-position': `${col * 100 / (CUSTOM_GRID_COLS - 1)}% ${row * 100 / (CUSTOM_GRID_ROWS - 1)}%`,
+  };
+}
+
 export function statSpriteStyle(stat: DisplayStat): Record<string, string> | null {
   // Check custom sprite map first (keyed by display label with underscores)
   const customKey = stat.label.replace(/ /g, '_');
