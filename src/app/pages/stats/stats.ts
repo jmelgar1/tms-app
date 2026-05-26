@@ -9,7 +9,7 @@ import { StatHighlight } from '../../components/stat-highlight/stat-highlight';
 import { StatTable } from '../../components/stat-table/stat-table';
 import { StatComparisonModal } from '../../components/stat-comparison-modal/stat-comparison-modal';
 import { AchievementGrid } from '../../components/achievement-grid/achievement-grid';
-import { extractHeadlineStats, buildChartGroups, formatNumber, ticksToDaysHours } from '../../utils/stat-utils';
+import { extractHeadlineStats, buildChartGroups, formatNumber, ticksToDaysHours, SegmentOptions } from '../../utils/stat-utils';
 
 @Component({
   selector: 'app-stats',
@@ -55,10 +55,24 @@ export class Stats implements OnInit {
   });
 
   chartGroups = computed(() => {
-    const stats = this.viewingPlayer() ? this.statsResult()?.stats : this.serverStats()?.stats;
-    if (!stats) return [];
-    const ranks = this.viewingPlayer() ? this.playerRanks()?.ranks : undefined;
-    return buildChartGroups(stats, ranks);
+    if (this.viewingPlayer()) {
+      const playerData = this.statsResult();
+      if (!playerData?.stats) return [];
+      const ranks = this.playerRanks()?.ranks;
+      const segmentOptions: SegmentOptions = {
+        mode: 'player',
+        playerColor: playerData.color,
+      };
+      return buildChartGroups(playerData.stats, ranks, segmentOptions);
+    } else {
+      const serverData = this.serverStats();
+      if (!serverData?.stats) return [];
+      const segmentOptions: SegmentOptions = {
+        mode: 'server',
+        playerColors: serverData.playerColors,
+      };
+      return buildChartGroups(serverData.stats, undefined, segmentOptions);
+    }
   });
 
   filteredChartGroups = computed(() => {

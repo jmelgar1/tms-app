@@ -65,6 +65,7 @@ export class AchievementGrid {
 
   totalCompleted = computed(() => this.advancements().totalCompleted);
   totalAvailable = computed(() => this.advancements().totalAvailable);
+  totalPlayers = computed(() => this.advancements().totalPlayers);
 
   // Tooltip
   tooltipAdvancement = signal<AdvancementEntry | null>(null);

@@ -49,11 +49,24 @@
               <td class="col-value">
                 <div class="value-cell">
                   <div class="mini-bar-track">
-                    <div
-                      class="mini-bar-fill"
-                      [style.width.%]="stat.percentage"
-                      [style.background-color]="barColor()"
-                    ></div>
+                    @if (stat.segments && stat.segments.length > 0) {
+                      <div class="mini-bar-fill-container" [style.width.%]="stat.percentage">
+                        @for (segment of stat.segments; track segment.label) {
+                          <div
+                            class="mini-bar-segment"
+                            [style.width.%]="segment.percentage"
+                            [style.background-color]="segment.color"
+                            [title]="segment.label + ': ' + segment.value"
+                          ></div>
+                        }
+                      </div>
+                    } @else {
+                      <div
+                        class="mini-bar-fill"
+                        [style.width.%]="stat.percentage"
+                        [style.background-color]="barColor()"
+                      ></div>
+                    }
                   </div>
                   <span class="value-text">{{ stat.displayValue }}</span>
                 </div>

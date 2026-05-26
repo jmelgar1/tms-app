@@ -1,11 +1,20 @@
 export interface PlayerStatsResponse {
   uuid: string;
   name: string;
+  color: string;
   stats: Record<string, StatEntry[]>;
 }
 
 export interface StatEntry {
   stat: string;
+  value: number;
+  serverTotal?: number;
+  players?: PlayerBreakdownEntry[];
+}
+
+export interface PlayerBreakdownEntry {
+  uuid: string;
+  name: string;
   value: number;
 }
 
@@ -19,6 +28,7 @@ export interface PlayerInfoResponse {
 
 export interface ServerStatsResponse {
   playerCount: number;
+  playerColors: Record<string, string>;
   stats: Record<string, StatEntry[]>;
 }
 
@@ -46,6 +56,13 @@ export interface PlayerRanksResponse {
   ranks: Record<string, RankEntry[]>;
 }
 
+export interface BarSegment {
+  percentage: number;
+  color: string;
+  label: string;
+  value: number;
+}
+
 export interface DisplayStat {
   label: string;
   rawValue: number;
@@ -54,6 +71,7 @@ export interface DisplayStat {
   statKey: string;
   category: string;
   rank?: number;
+  segments?: BarSegment[];
 }
 
 export interface StatChartGroup {
@@ -94,6 +112,7 @@ export interface AdvancementEntry {
   hidden: boolean;
   completed: boolean;
   completedAt: string | null;
+  unlockedBy: number;
 }
 
 export interface AdvancementCategory {
@@ -108,4 +127,5 @@ export interface PlayerAdvancementsResponse {
   categories: Record<string, AdvancementCategory>;
   totalCompleted: number;
   totalAvailable: number;
+  totalPlayers: number;
 }

@@ -19,6 +19,7 @@ export class StatComparisonModal implements OnInit, OnDestroy {
   playerUuid = input.required<string>();
   serverTotal = input.required<number>();
   color = input<string>('#27ae60');
+  playerColors = input<Record<string, string>>({});
 
   closed = output<void>();
 
@@ -131,4 +132,12 @@ export class StatComparisonModal implements OnInit, OnDestroy {
     this.viewedUuid.set(entry.uuid);
     this.viewedValue.set(entry.value);
   }
+
+  entryColor(entry: LeaderboardEntry): string {
+    return this.playerColors()[entry.uuid] ?? this.color();
+  }
+
+  viewedColor = computed(() => {
+    return this.playerColors()[this.viewedUuid()] ?? this.color();
+  });
 }

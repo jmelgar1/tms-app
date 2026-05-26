@@ -22,7 +22,11 @@
             <div
               class="contrib-bar-fill"
               [style.width.%]="viewedPercentage()"
-              [style.background-color]="color()"
+              [style.background-color]="viewedColor()"
+            ></div>
+            <div
+              class="contrib-bar-fill contrib-bar-rest"
+              [style.width.%]="100 - viewedPercentage()"
             ></div>
           </div>
           <div class="contrib-row">
@@ -40,7 +44,7 @@
       <div class="section-header">
         <h4 class="section-title">Leaderboard</h4>
         @if (viewedRank(); as rank) {
-          <span class="rank-badge" [style.background-color]="color()">#{{ rank }}</span>
+          <span class="rank-badge" [style.background-color]="viewedColor()">#{{ rank }}</span>
         }
       </div>
 
@@ -65,7 +69,7 @@
                 <div
                   class="lb-bar-fill"
                   [style.width.%]="leaderboardPercentage(entry)"
-                  [style.background-color]="color()"
+                  [style.background-color]="entryColor(entry)"
                 ></div>
               </div>
               <span class="lb-value">{{ formatValue(entry.value) }}</span>
