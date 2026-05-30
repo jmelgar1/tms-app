@@ -10,7 +10,7 @@ const CUSTOM_GRID_ROWS = 7;
 
 const VERB_PREFIXES = [
   'interact_with_', 'inspect_', 'open_', 'play_', 'tune_',
-  'fill_', 'use_', 'eat_', 'clean_',
+  'fill_', 'use_', 'eat_', 'clean_', 'trigger_',
 ];
 
 const CUSTOM_STAT_OVERRIDES: Record<string, string> = {
