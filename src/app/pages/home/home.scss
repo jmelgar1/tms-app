@@ -182,6 +182,42 @@
   align-self: flex-start;
 }
 
+.nav-buttons {
+  display: flex;
+  gap: clamp(1.5rem, 8vw, 8rem);
+
+  @include bp.respond-to(tablet) {
+    align-self: stretch;
+    justify-content: space-evenly;
+    gap: 0;
+  }
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  background: none;
+  padding: 0;
+  min-width: 6.5em;
+}
+
+.nav-btn-icon {
+  width: clamp(50px, 15vw, 125px);
+  height: clamp(50px, 15vw, 125px);
+  image-rendering: pixelated;
+  transition: transform 0.15s ease;
+
+  .nav-btn:hover & {
+    transform: scale(1.1);
+  }
+}
+
 // Layout visibility
 .mobile-layout {
   display: none;
@@ -214,10 +250,6 @@
 
   .hero {
     margin-bottom: 0.5rem;
-  }
-
-  .nav-buttons {
-    gap: clamp(1.5rem, 8vw, 3rem);
   }
 
   .nav-btn-icon {
@@ -514,33 +546,4 @@
   color: rgba(255, 255, 255, 0.4);
   font-size: 1.1rem;
   text-align: center;
-}
-
-.nav-buttons {
-  display: flex;
-  gap: clamp(1.5rem, 8vw, 8rem);
-}
-
-.nav-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 600;
-  background: none;
-  padding: 0;
-}
-
-.nav-btn-icon {
-  width: clamp(50px, 15vw, 125px);
-  height: clamp(50px, 15vw, 125px);
-  image-rendering: pixelated;
-  transition: transform 0.15s ease;
-
-  .nav-btn:hover & {
-    transform: scale(1.1);
-  }
 }
