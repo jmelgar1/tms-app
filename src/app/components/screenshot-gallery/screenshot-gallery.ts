@@ -102,6 +102,7 @@ export class ScreenshotGallery implements OnInit, OnChanges, AfterViewInit {
   }
 
   goNext(): void {
+    if (this.scrolling) return;
     const max = this.screenshots().length - 1;
     if (this.currentIndex() >= max) return;
     this.scrolling = true;
@@ -111,6 +112,7 @@ export class ScreenshotGallery implements OnInit, OnChanges, AfterViewInit {
   }
 
   goPrev(): void {
+    if (this.scrolling) return;
     if (this.currentIndex() <= 0) return;
     this.scrolling = true;
     this.currentIndex.update((i) => i - 1);

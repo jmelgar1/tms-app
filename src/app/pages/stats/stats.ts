@@ -125,6 +125,10 @@ export class Stats implements OnInit {
     return `https://mc-heads.net/avatar/${uuid}/48`;
   }
 
+  playerColor(uuid: string): string {
+    return this.serverStats()?.playerColors[uuid] ?? '#555';
+  }
+
   selectPlayer(name: string): void {
     this.searchName = name;
     this.search();

@@ -44,6 +44,7 @@ export class PlayerStatsService {
     );
   }
 
+
   getLeaderboard(category: string, stat: string, limit: number = 100): Observable<LeaderboardResponse> {
     return this.http.get<LeaderboardResponse>(
       `${environment.tmsApiBase}/leaderboard?category=${encodeURIComponent(category)}&stat=${encodeURIComponent(stat)}&limit=${limit}`

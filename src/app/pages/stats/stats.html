@@ -88,7 +88,12 @@
       @if (playerList().length > 0) {
         <div class="player-list">
           @for (entry of playerList(); track entry.uuid) {
-            <button class="player-card" (click)="selectPlayer(entry.name)" [title]="entry.name">
+            <button
+              class="player-card"
+              (click)="selectPlayer(entry.name)"
+              [title]="entry.name"
+              [style.--player-color]="playerColor(entry.uuid)"
+            >
               <img
                 [src]="avatarUrl(entry.uuid)"
                 [alt]="entry.name"

@@ -1,8 +1,4 @@
 <section class="gallery-section">
-  <div class="gallery-header">
-    <img src="/assets/SEE_THE_SERVER.png" alt="See the Server" class="gallery-title-img" />
-  </div>
-
   @if (loading()) {
     <p class="status-text">Loading screenshots...</p>
   } @else if (error()) {
@@ -20,10 +16,7 @@
       @if (canScrollDown()) {
         <button class="nav-arrow nav-arrow-right" (click)="goNext()">&#8250;</button>
       }
-      <div class="gallery-viewport"
-           (wheel)="onWheel($event)"
-           (touchstart)="onTouchStart($event)"
-           (touchend)="onTouchEnd($event)">
+      <div class="gallery-viewport">
         <div class="gallery-track" [style.transform]="trackTransform()">
           @for (screenshot of screenshots(); track screenshot.id) {
             <div class="screenshot-card" #card>

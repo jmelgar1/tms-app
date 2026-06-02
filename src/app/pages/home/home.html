@@ -1,90 +1,116 @@
 <div class="home">
-  <div class="title-images">
-    <img src="/assets/The-Server.png" alt="The Server" class="title-img" />
-    <img src="/assets/On-Minecraft.png" alt="On Minecraft" class="title-img" />
+  <!-- Desktop layout (>900px) -->
+  <div class="desktop-layout">
+    <div class="hero">
+      <img src="/assets/home-page/GRASS_BLOCK.svg" alt="Grass Block" class="hero-icon" />
+      <img src="/assets/home-page/TSOM_header.png" alt="The Server On Minecraft" class="hero-title" />
+    </div>
+
+    <nav class="nav-buttons">
+      <a routerLink="/map" class="nav-btn">
+        <img src="/assets/home-page/map_icon.png" alt="" class="nav-btn-icon" />
+        <span>Map</span>
+      </a>
+      <a routerLink="/stats" class="nav-btn">
+        <img src="/assets/home-page/stats_icon.png" alt="" class="nav-btn-icon" />
+        <span>Stats</span>
+      </a>
+      <a href="#screenshots" class="nav-btn" (click)="scrollToScreenshots($event)">
+        <img src="/assets/home-page/screenshots_icon.png" alt="" class="nav-btn-icon" />
+        <span>Screenshots</span>
+      </a>
+    </nav>
+
+    @if (loading()) {
+      <p class="loading">Loading server status...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else if (status(); as s) {
+      <div class="status-container">
+        <span class="server-ip">IP: theserveronminecraft.com</span>
+        <div class="desktop-status-bar">
+          <span class="desktop-status-dot" [class.active]="s.players && s.players.online > 0"></span>
+          <span class="desktop-status-count">
+            @if (s.players) {
+              {{ s.players.online }} / {{ s.players.max }}
+            }
+          </span>
+          <div class="desktop-status-players">
+            @if (s.players && s.players.list && s.players.list.length > 0) {
+              @for (player of s.players.list; track player.uuid) {
+                <a [routerLink]="'/stats'" [queryParams]="{ player: playerName(player) }" [title]="playerName(player)">
+                  <img [src]="playerAvatarUrl(player)" [alt]="playerName(player)" class="desktop-player-avatar" />
+                </a>
+              }
+            }
+          </div>
+          <span class="desktop-status-day">Day {{ daysSinceStart() }}</span>
+        </div>
+      </div>
+    }
+
+    <app-screenshot-gallery
+      id="screenshots"
+      [refreshTrigger]="galleryRefresh()"
+      (uploadClicked)="openUploadModal()"
+    />
   </div>
 
-  <div class="content-row">
-    <div class="left-column">
-      <img src="/assets/server_status.png" alt="Server Status" class="section-title-img" />
-      <section class="status-section">
-        <div class="status-card">
-          <div class="card-heading">
-            <span class="server-name">The Server On Minecraft</span>
-            <span class="server-region">Virginia, United States</span>
-          </div>
+  <!-- Mobile layout (<=900px) -->
+  <div class="mobile-layout">
+    <div class="hero">
+      <img src="/assets/home-page/GRASS_BLOCK.svg" alt="Grass Block" class="hero-icon" />
+      <img src="/assets/home-page/TSOM_header.png" alt="The Server On Minecraft" class="hero-title" />
+    </div>
 
-          @if (loading()) {
-            <p class="loading">Loading server status...</p>
-          } @else if (error()) {
-            <p class="error">{{ error() }}</p>
-          } @else if (status(); as s) {
-            <div class="status-header">
-              @if (s.icon) {
-                <img [src]="s.icon" alt="Server icon" class="server-icon" />
-              }
-              <div class="status-details">
-                <div class="status-top-row">
-                  <div class="status-bottom-row">
-                    <span class="badge" [class.online]="s.online" [class.offline]="!s.online">
-                      {{ s.online ? 'Online' : 'Offline' }}
-                    </span>
-                    @if (s.version) {
-                      <span class="version">{{ s.version }}</span>
-                    }
-                    @if (s.software) {
-                      <span class="software">{{ s.software }}</span>
-                    }
-                  </div>
-                  @if (s.players) {
-                    <span class="player-count">{{ s.players.online }} / {{ s.players.max }}</span>
-                  }
-                </div>
-                @if (s.motd && s.motd.html.length > 0) {
-                  <div class="motd" [innerHTML]="s.motd.html.join('<br>')"></div>
-                }
-              </div>
-            </div>
+    <nav class="nav-buttons">
+      <a routerLink="/map" class="nav-btn">
+        <img src="/assets/home-page/map_icon.png" alt="" class="nav-btn-icon" />
+        <span>Map</span>
+      </a>
+      <a routerLink="/stats" class="nav-btn">
+        <img src="/assets/home-page/stats_icon.png" alt="" class="nav-btn-icon" />
+        <span>Stats</span>
+      </a>
+      <a href="#screenshots-mobile" class="nav-btn" (click)="scrollToScreenshots($event, 'screenshots-mobile')">
+        <img src="/assets/home-page/screenshots_icon.png" alt="" class="nav-btn-icon" />
+        <span>Screenshots</span>
+      </a>
+    </nav>
 
+    @if (loading()) {
+      <p class="loading">Loading server status...</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else if (status(); as s) {
+      <div class="status-container">
+        <span class="server-ip">IP: theserveronminecraft.com</span>
+        <div class="mobile-status-bar">
+          <span class="desktop-status-dot" [class.active]="s.players && s.players.online > 0"></span>
+          <span class="desktop-status-count">
             @if (s.players) {
-              <div class="players">
-                @if (s.players.list && s.players.list.length > 0) {
-                  <ul class="player-list">
-                    @for (player of s.players.list; track player.uuid) {
-                      <li>
-                        <a [routerLink]="'/stats'" [queryParams]="{ player: playerName(player) }" [title]="playerName(player)">
-                          <img [src]="playerAvatarUrl(player)" [alt]="playerName(player)" class="player-avatar" />
-                        </a>
-                      </li>
-                    }
-                  </ul>
-                } @else {
-                  <p class="no-players">No Online Players</p>
-                }
-              </div>
+              {{ s.players.online }} / {{ s.players.max }}
             }
-
-            <div class="day-counter">
-              Day {{ daysSinceStart() }}
-            </div>
-          }
+          </span>
+          <div class="desktop-status-players">
+            @if (s.players && s.players.list && s.players.list.length > 0) {
+              @for (player of s.players.list; track player.uuid) {
+                <a [routerLink]="'/stats'" [queryParams]="{ player: playerName(player) }" [title]="playerName(player)">
+                  <img [src]="playerAvatarUrl(player)" [alt]="playerName(player)" class="desktop-player-avatar" />
+                </a>
+              }
+            }
+          </div>
+          <span class="desktop-status-day">Day {{ daysSinceStart() }}</span>
         </div>
-      </section>
+      </div>
+    }
 
-      <nav class="nav-buttons">
-        <a [href]="bluemapUrl" target="_blank" rel="noopener noreferrer" class="nav-btn">Map</a>
-        <a routerLink="/stats" class="nav-btn">Stats</a>
-      </nav>
-
-      <a routerLink="/donate" class="donate-btn">Donate</a>
-    </div>
-
-    <div class="right-column">
-      <app-screenshot-gallery
-        [refreshTrigger]="galleryRefresh()"
-        (uploadClicked)="openUploadModal()"
-      />
-    </div>
+    <app-screenshot-gallery
+      id="screenshots-mobile"
+      [refreshTrigger]="galleryRefresh()"
+      (uploadClicked)="openUploadModal()"
+    />
   </div>
 
   @if (showUploadModal()) {

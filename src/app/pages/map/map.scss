@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+.bluemap-frame {
+  width: 100%;
+  height: calc(100vh - 52px);
+  border: none;
+  display: block;
+}

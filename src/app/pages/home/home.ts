@@ -4,8 +4,6 @@ import { ServerStatusService } from '../../services/server-status.service';
 import { ServerStatus, PlayerInfo } from '../../models/server-status.model';
 import { ScreenshotGallery } from '../../components/screenshot-gallery/screenshot-gallery';
 import { ScreenshotUploadModal } from '../../components/screenshot-upload-modal/screenshot-upload-modal';
-import { environment } from '../../../environments/environment';
-
 @Component({
   selector: 'app-home',
   imports: [RouterLink, ScreenshotGallery, ScreenshotUploadModal],
@@ -14,7 +12,6 @@ import { environment } from '../../../environments/environment';
 })
 export class Home implements OnInit, OnDestroy {
   private statusService = inject(ServerStatusService);
-  bluemapUrl = environment.bluemapUrl;
   private refreshInterval: ReturnType<typeof setInterval> | null = null;
 
   status = signal<ServerStatus | null>(null);
@@ -52,6 +49,11 @@ export class Home implements OnInit, OnDestroy {
 
   playerAvatarUrl(player: PlayerInfo): string {
     return `https://mc-heads.net/avatar/${player.uuid}/48`;
+  }
+
+  scrollToScreenshots(event: Event, id = 'screenshots'): void {
+    event.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   }
 
   openUploadModal(): void {

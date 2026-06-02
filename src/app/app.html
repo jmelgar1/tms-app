@@ -1,4 +1,9 @@
+@if (isMapRoute()) {
+  <app-navbar />
+}
 <main>
   <router-outlet />
 </main>
-<app-footer />
+@if (!isMapRoute()) {
+  <app-footer />
+}
