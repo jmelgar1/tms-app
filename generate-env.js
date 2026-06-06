@@ -7,6 +7,7 @@ const content = `export const environment = {
   tmsApiBase: '${process.env.tmsApiBase}',
   itemSpritesheetUrl: '${process.env.itemSpritesheetUrl}',
   customSpritesheetUrl: '${process.env.customSpritesheetUrl}',
+  mobSpritesheetUrl: '${process.env.mobSpritesheetUrl}',
 };
 `;
 
