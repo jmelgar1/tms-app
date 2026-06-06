@@ -31,6 +31,7 @@ const CHART_COLORS = {
   crafted: '#9b59b6',
   used: '#1abc9c',
   broken: '#e84393',
+  killed: '#c0392b',
   killedBy: '#d63031',
 } as const;
 
@@ -249,6 +250,7 @@ export function buildChartGroups(
     { key: 'minecraft:crafted', title: 'Items Crafted', color: CHART_COLORS.crafted },
     { key: 'minecraft:used', title: 'Items Used', color: CHART_COLORS.used },
     { key: 'minecraft:broken', title: 'Items Broken', color: CHART_COLORS.broken },
+    { key: 'minecraft:killed', title: 'Mob Kills', color: CHART_COLORS.killed },
     // minecraft:killed_by is handled separately below to include environmental deaths
   ];
 

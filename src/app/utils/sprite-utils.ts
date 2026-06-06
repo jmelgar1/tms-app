@@ -1,12 +1,15 @@
 import { SPRITE_MAP } from '../components/inventory-grid/sprite-map';
 import { CUSTOM_SPRITE_MAP } from '../components/stat-table/custom-sprite-map';
+import { MOB_SPRITE_MAP } from '../components/stat-table/mob-sprite-map';
 import { environment } from '../../environments/environment';
 import { DisplayStat } from '../models/player-stats.model';
 
 const TILE_SIZE = 64;
 const ITEM_GRID_SIZE = 39;
-const CUSTOM_GRID_COLS = 8;
-const CUSTOM_GRID_ROWS = 7;
+const CUSTOM_GRID_COLS = 6;
+const CUSTOM_GRID_ROWS = 5;
+const MOB_GRID_COLS = 10;
+const MOB_GRID_ROWS = 9;
 
 const VERB_PREFIXES = [
   'interact_with_', 'inspect_', 'open_', 'play_', 'tune_',
@@ -116,29 +119,37 @@ function resolveItemKey(statKey: string): string | null {
   return null;
 }
 
-export function heartSpriteStyle(): Record<string, string> {
-  const pos = CUSTOM_SPRITE_MAP['Heart'];
-  const col = pos.x / TILE_SIZE;
-  const row = pos.y / TILE_SIZE;
+function spriteStyle(url: string, cols: number, rows: number, x: number, y: number): Record<string, string> {
+  const col = x / TILE_SIZE;
+  const row = y / TILE_SIZE;
   return {
-    'background-image': `url(${environment.customSpritesheetUrl})`,
-    'background-size': `${CUSTOM_GRID_COLS * 100}% ${CUSTOM_GRID_ROWS * 100}%`,
-    'background-position': `${col * 100 / (CUSTOM_GRID_COLS - 1)}% ${row * 100 / (CUSTOM_GRID_ROWS - 1)}%`,
+    'background-image': `url(${url})`,
+    'background-size': `${cols * 100}% ${rows * 100}%`,
+    'background-position': `${col * 100 / (cols - 1)}% ${row * 100 / (rows - 1)}%`,
   };
 }
 
+export function heartSpriteStyle(): Record<string, string> {
+  const pos = CUSTOM_SPRITE_MAP['Heart'];
+  return spriteStyle(environment.customSpritesheetUrl, CUSTOM_GRID_COLS, CUSTOM_GRID_ROWS, pos.x, pos.y);
+}
+
 export function statSpriteStyle(stat: DisplayStat): Record<string, string> | null {
-  // Check custom sprite map first (keyed by display label with underscores)
   const customKey = stat.label.replace(/ /g, '_');
+
+  // Check mob sprite map for killed/killed_by categories
+  const isMobCategory = stat.category === 'minecraft:killed' || stat.category === 'minecraft:killed_by';
+  if (isMobCategory) {
+    const mobPos = MOB_SPRITE_MAP[customKey];
+    if (mobPos) {
+      return spriteStyle(environment.mobSpritesheetUrl, MOB_GRID_COLS, MOB_GRID_ROWS, mobPos.x, mobPos.y);
+    }
+  }
+
+  // Check custom sprite map (non-mob stats: movement, combat, interactions, Environmental, etc.)
   const customPos = CUSTOM_SPRITE_MAP[customKey];
   if (customPos) {
-    const col = customPos.x / TILE_SIZE;
-    const row = customPos.y / TILE_SIZE;
-    return {
-      'background-image': `url(${environment.customSpritesheetUrl})`,
-      'background-size': `${CUSTOM_GRID_COLS * 100}% ${CUSTOM_GRID_ROWS * 100}%`,
-      'background-position': `${col * 100 / (CUSTOM_GRID_COLS - 1)}% ${row * 100 / (CUSTOM_GRID_ROWS - 1)}%`,
-    };
+    return spriteStyle(environment.customSpritesheetUrl, CUSTOM_GRID_COLS, CUSTOM_GRID_ROWS, customPos.x, customPos.y);
   }
 
   // Fall back to item sprite map (keyed by minecraft item ID)
@@ -146,11 +157,5 @@ export function statSpriteStyle(stat: DisplayStat): Record<string, string> | nul
   if (!resolved) return null;
   const pos = SPRITE_MAP[resolved];
   if (!pos) return null;
-  const col = pos.x / TILE_SIZE;
-  const row = pos.y / TILE_SIZE;
-  return {
-    'background-image': `url(${environment.itemSpritesheetUrl})`,
-    'background-size': `${ITEM_GRID_SIZE * 100}% ${ITEM_GRID_SIZE * 100}%`,
-    'background-position': `${col * 100 / (ITEM_GRID_SIZE - 1)}% ${row * 100 / (ITEM_GRID_SIZE - 1)}%`,
-  };
+  return spriteStyle(environment.itemSpritesheetUrl, ITEM_GRID_SIZE, ITEM_GRID_SIZE, pos.x, pos.y);
 }
