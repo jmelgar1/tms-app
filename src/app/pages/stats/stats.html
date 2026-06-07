@@ -63,7 +63,7 @@
         <p class="no-results">No stats matching "{{ globalStatSearch() }}"</p>
       }
 
-      <!-- Desktop: tabbed + grid layout -->
+      <!-- Tabbed layout: 2-col grid on desktop, single column under 900px -->
       <div class="tab-layout">
         <div class="tab-bar">
           @for (tab of availableTabs(); track tab.id) {
@@ -86,20 +86,6 @@
             />
           }
         </div>
-      </div>
-
-      <!-- Mobile: stacked layout -->
-      <div class="stacked-layout">
-        @for (group of filteredChartGroups(); track group.title) {
-          <app-stat-table
-            [title]="group.title"
-            [stats]="group.stats"
-            [barColor]="group.color"
-            [scrollable]="group.scrollable ?? false"
-            [showRanks]="true"
-            (statClicked)="onStatClicked($event, group.color)"
-          />
-        }
       </div>
     }
   } @else {
@@ -158,7 +144,7 @@
         <p class="no-results">No stats matching "{{ globalStatSearch() }}"</p>
       }
 
-      <!-- Desktop: tabbed + grid layout -->
+      <!-- Tabbed layout: 2-col grid on desktop, single column under 900px -->
       <div class="tab-layout">
         <div class="tab-bar">
           @for (tab of availableTabs(); track tab.id) {
@@ -180,19 +166,6 @@
             />
           }
         </div>
-      </div>
-
-      <!-- Mobile: stacked layout -->
-      <div class="stacked-layout">
-        @for (group of filteredChartGroups(); track group.title) {
-          <app-stat-table
-            [title]="group.title"
-            [stats]="group.stats"
-            [barColor]="group.color"
-            [scrollable]="group.scrollable ?? false"
-            (statClicked)="onStatClicked($event, group.color)"
-          />
-        }
       </div>
     }
   }

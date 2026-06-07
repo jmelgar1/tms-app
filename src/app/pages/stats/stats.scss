@@ -224,18 +224,15 @@ h1 {
   z-index: 10;
 }
 
-// Tabbed layout (desktop only)
+// Tabbed layout: 2-col grid on desktop, single column under 900px.
 .tab-layout {
   display: block;
-}
-
-.stacked-layout {
-  display: none;
 }
 
 .tab-bar {
   display: flex;
   gap: 0;
+  overflow-x: auto;
   margin-bottom: 1.25rem;
   padding: 0.35rem 0.35rem 0;
   background: rgba(10, 10, 10, 0.72);
@@ -292,12 +289,16 @@ h1 {
 }
 
 @include bp.respond-to(tablet) {
-  .tab-layout {
-    display: none;
-  }
+  // Single column: tables stack instead of sitting side by side.
+  .tab-grid {
+    grid-template-columns: 1fr;
 
-  .stacked-layout {
-    display: block;
+    // Neutralize the lone-last-table centering rule (it would force half width).
+    > :last-child:nth-child(odd) {
+      grid-column: auto;
+      width: auto;
+      justify-self: stretch;
+    }
   }
 }
 
