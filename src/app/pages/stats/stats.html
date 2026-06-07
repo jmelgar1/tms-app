@@ -63,16 +63,44 @@
         <p class="no-results">No stats matching "{{ globalStatSearch() }}"</p>
       }
 
-      @for (group of filteredChartGroups(); track group.title) {
-        <app-stat-table
-          [title]="group.title"
-          [stats]="group.stats"
-          [barColor]="group.color"
-          [scrollable]="group.scrollable ?? false"
-          [showRanks]="true"
-          (statClicked)="onStatClicked($event, group.color)"
-        />
-      }
+      <!-- Desktop: tabbed + grid layout -->
+      <div class="tab-layout">
+        <div class="tab-bar">
+          @for (tab of availableTabs(); track tab.id) {
+            <button
+              class="tab-btn"
+              [class.active]="activeTab() === tab.id"
+              (click)="activeTab.set(tab.id)"
+            >{{ tab.label }}</button>
+          }
+        </div>
+        <div class="tab-grid">
+          @for (group of activeTabGroups(); track group.title) {
+            <app-stat-table
+              [title]="group.title"
+              [stats]="group.stats"
+              [barColor]="group.color"
+              [scrollable]="group.scrollable ?? false"
+              [showRanks]="true"
+              (statClicked)="onStatClicked($event, group.color)"
+            />
+          }
+        </div>
+      </div>
+
+      <!-- Mobile: stacked layout -->
+      <div class="stacked-layout">
+        @for (group of filteredChartGroups(); track group.title) {
+          <app-stat-table
+            [title]="group.title"
+            [stats]="group.stats"
+            [barColor]="group.color"
+            [scrollable]="group.scrollable ?? false"
+            [showRanks]="true"
+            (statClicked)="onStatClicked($event, group.color)"
+          />
+        }
+      </div>
     }
   } @else {
     <!-- Server Stats View -->
@@ -130,15 +158,42 @@
         <p class="no-results">No stats matching "{{ globalStatSearch() }}"</p>
       }
 
-      @for (group of filteredChartGroups(); track group.title) {
-        <app-stat-table
-          [title]="group.title"
-          [stats]="group.stats"
-          [barColor]="group.color"
-          [scrollable]="group.scrollable ?? false"
-          (statClicked)="onStatClicked($event, group.color)"
-        />
-      }
+      <!-- Desktop: tabbed + grid layout -->
+      <div class="tab-layout">
+        <div class="tab-bar">
+          @for (tab of availableTabs(); track tab.id) {
+            <button
+              class="tab-btn"
+              [class.active]="activeTab() === tab.id"
+              (click)="activeTab.set(tab.id)"
+            >{{ tab.label }}</button>
+          }
+        </div>
+        <div class="tab-grid">
+          @for (group of activeTabGroups(); track group.title) {
+            <app-stat-table
+              [title]="group.title"
+              [stats]="group.stats"
+              [barColor]="group.color"
+              [scrollable]="group.scrollable ?? false"
+              (statClicked)="onStatClicked($event, group.color)"
+            />
+          }
+        </div>
+      </div>
+
+      <!-- Mobile: stacked layout -->
+      <div class="stacked-layout">
+        @for (group of filteredChartGroups(); track group.title) {
+          <app-stat-table
+            [title]="group.title"
+            [stats]="group.stats"
+            [barColor]="group.color"
+            [scrollable]="group.scrollable ?? false"
+            (statClicked)="onStatClicked($event, group.color)"
+          />
+        }
+      </div>
     }
   }
 </div>

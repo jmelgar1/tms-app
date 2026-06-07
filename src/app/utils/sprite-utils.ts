@@ -134,7 +134,23 @@ export function heartSpriteStyle(): Record<string, string> {
   return spriteStyle(environment.customSpritesheetUrl, CUSTOM_GRID_COLS, CUSTOM_GRID_ROWS, pos.x, pos.y);
 }
 
+// Memoize resolved sprite styles. Row recycling during virtual scroll re-resolves
+// the same stats repeatedly; caching keeps the returned object reference stable
+// (cheaper change detection) and avoids re-running resolveItemKey on every render.
+const spriteStyleCache = new Map<string, Record<string, string> | null>();
+
 export function statSpriteStyle(stat: DisplayStat): Record<string, string> | null {
+  const cacheKey = `${stat.category}|${stat.statKey}|${stat.label}`;
+  const cached = spriteStyleCache.get(cacheKey);
+  if (cached !== undefined) {
+    return cached;
+  }
+  const resolved = computeStatSpriteStyle(stat);
+  spriteStyleCache.set(cacheKey, resolved);
+  return resolved;
+}
+
+function computeStatSpriteStyle(stat: DisplayStat): Record<string, string> | null {
   const customKey = stat.label.replace(/ /g, '_');
 
   // Check mob sprite map for killed/killed_by categories

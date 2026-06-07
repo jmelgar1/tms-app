@@ -47,31 +47,52 @@
   position: relative;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  overflow: hidden;
+// Shared column layout so the header row and data rows stay aligned.
+// Tracks: statistic | bar (flexes, uniform per row) | value (fixed) | rank.
+// The value track is a fixed width (not max-content) so every table shares the
+// same column proportions and the bars line up across tables, not just within one.
+.grid-head,
+.stat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 8rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+
+  &.with-rank {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 8rem 80px;
+  }
 }
 
-thead th {
-  position: sticky;
-  top: 0;
-  background: rgb(20, 20, 20);
-  color: #aaa;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.4rem 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-  z-index: 1;
+// The "Value" header label spans the bar + value tracks.
+.col-value-head {
+  grid-column: 2 / 4;
+}
 
-  &:hover {
-    color: #fff;
+.grid-head {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  background: rgb(20, 20, 20);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  // Reserve space for the viewport scrollbar so columns line up with the rows.
+  &.show-scrollbar {
+    padding-right: calc(0.5rem + 8px);
+  }
+
+  > div {
+    color: #aaa;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+
+    &:hover {
+      color: #fff;
+    }
   }
 }
 
@@ -89,29 +110,27 @@ thead th {
 
 .col-stat {
   text-align: left;
-  width: 50%;
+}
+
+.col-bar {
+  min-width: 0;
 }
 
 .col-value {
-  text-align: left;
+  text-align: right;
 }
 
 .col-rank {
   text-align: center;
-  width: 80px;
 }
 
 .stat-row {
+  height: 32px;
   cursor: pointer;
   transition: background 0.15s ease;
 
   &:hover {
     background: rgba(255, 255, 255, 0.03);
-  }
-
-  td {
-    padding: 0.3rem 0.5rem;
-    vertical-align: middle;
   }
 
   .col-stat {
@@ -120,10 +139,15 @@ thead th {
     display: flex;
     align-items: center;
     gap: 0.35rem;
+    min-width: 0;
   }
 }
 
-.stat-label {}
+.stat-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .stat-icon {
   width: 20px;
@@ -132,19 +156,12 @@ thead th {
   image-rendering: pixelated;
 }
 
-.value-cell {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .mini-bar-track {
-  flex: 1;
+  width: 100%;
   height: 14px;
   background: #1a1a1a;
   border-radius: 3px;
   overflow: hidden;
-  min-width: 40px;
 }
 
 .mini-bar-fill {
@@ -184,8 +201,6 @@ thead th {
   color: #aaa;
   font-size: 0.8rem;
   white-space: nowrap;
-  flex-shrink: 0;
-  width: 130px;
   text-align: right;
 }
 
@@ -259,10 +274,10 @@ thead th {
   }
 }
 
-.table-body.scrollable {
-  max-height: 326px;
-  overflow-y: auto;
-  padding-right: 0.5rem;
+// cdk-virtual-scroll-viewport host. CDK supplies overflow/contain; height is set
+// inline from viewportHeight() so short tables fit content and long ones scroll.
+.table-body {
+  display: block;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -289,53 +304,26 @@ thead th {
   }
 
   .stat-row .col-stat {
-    display: table-cell;
     font-size: 0.8rem;
   }
 
   .stat-icon {
-    display: inline-block;
     width: 18px;
     height: 18px;
-    vertical-align: middle;
-    margin-right: 0.35rem;
-  }
-
-  .stat-label {
-    display: inline-block;
-    vertical-align: middle;
-    max-width: calc(100% - 26px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .value-cell {
-    gap: 0.25rem;
-  }
-
-  .mini-bar-track {
-    min-width: 20px;
   }
 
   .value-text {
-    width: 65px;
-    min-width: auto;
     font-size: 0.75rem;
   }
 
-
-  .col-rank {
-    width: 60px;
+  .grid-head.with-rank,
+  .stat-row.with-rank {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 8rem 60px;
   }
 
   .filter-input {
     width: 110px;
     font-size: 0.75rem;
-  }
-
-  .table-body.scrollable {
-    max-height: 260px;
   }
 }
 
@@ -345,16 +333,16 @@ thead th {
   }
 
   .value-text {
-    width: 80px;
     font-size: 0.7rem;
   }
 
-  thead th {
+  .grid-head > div {
     font-size: 0.65rem;
-    padding: 0.3rem 0.35rem;
   }
 
-  .stat-row td {
-    padding: 0.25rem 0.35rem;
+  .grid-head,
+  .stat-row {
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, effect, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
@@ -48,6 +48,31 @@ export class Stats implements OnInit {
   // Global stat search
   globalStatSearch = signal('');
 
+  // Tabbed layout
+  readonly statTabs = [
+    { id: 'overview', label: 'General', titles: ['Movement', 'Interactions', 'Combat'] },
+    { id: 'items', label: 'Items', titles: ['Blocks Mined', 'Items Crafted', 'Items Used', 'Items Broken'] },
+    { id: 'mobs', label: 'Mobs & Deaths', titles: ['Mob Kills', 'Death Causes'] },
+  ] as const;
+
+  activeTab = signal<string>('overview');
+
+  // Only show tabs that have at least one populated section for this profile.
+  availableTabs = computed(() => {
+    const present = new Set(this.chartGroups().map(g => g.title));
+    return this.statTabs.filter(tab => tab.titles.some(title => present.has(title)));
+  });
+
+  constructor() {
+    // If the active tab is hidden (no data), fall back to the first available one.
+    effect(() => {
+      const tabs = this.availableTabs();
+      if (tabs.length > 0 && !tabs.some(tab => tab.id === this.activeTab())) {
+        this.activeTab.set(tabs[0].id);
+      }
+    });
+  }
+
   headlines = computed(() => {
     const stats = this.viewingPlayer() ? this.statsResult()?.stats : this.serverStats()?.stats;
     if (!stats) return null;
@@ -86,6 +111,14 @@ export class Stats implements OnInit {
         return { ...group, stats: filtered, scrollable: filtered.length > 10 };
       })
       .filter(group => group.stats.length > 0);
+  });
+
+  activeTabGroups = computed(() => {
+    const tab = this.statTabs.find(t => t.id === this.activeTab());
+    if (!tab) return [];
+    const groups = this.filteredChartGroups();
+    const groupMap = new Map(groups.map(g => [g.title, g]));
+    return tab.titles.map(t => groupMap.get(t)).filter((g): g is NonNullable<typeof g> => g != null);
   });
 
   serverPlayerCount = computed(() => {

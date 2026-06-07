@@ -10,85 +10,87 @@
     />
   </div>
   <div class="table-wrapper">
+    <div class="grid-head" [class.with-rank]="showRanks()" [class.show-scrollbar]="isScrollable()">
+      <div class="col-stat" (click)="toggleSort('label')">
+        Statistic
+        <span class="sort-arrow" [class.active]="isSortActive('label')">{{ sortIndicator('label') }}</span>
+      </div>
+      <div class="col-value-head" (click)="toggleSort('rawValue')">
+        Value
+        <span class="sort-arrow" [class.active]="isSortActive('rawValue')">{{ sortIndicator('rawValue') }}</span>
+      </div>
+      @if (showRanks()) {
+        <div class="col-rank" (click)="toggleSort('rank')">
+          Ranking
+          <span class="sort-arrow" [class.active]="isSortActive('rank')">{{ sortIndicator('rank') }}</span>
+        </div>
+      }
+    </div>
+
     @if (isScrollable()) {
       <div class="scroll-indicator top" [class.visible]="canScrollUp()"><img src="assets/buttons/chevron-up.svg" alt="" /></div>
     }
-    <div
+
+    <cdk-virtual-scroll-viewport
       class="table-body"
       [class.scrollable]="isScrollable()"
-      (scroll)="onScroll($event)"
+      [itemSize]="rowHeight"
+      [style.height.px]="viewportHeight()"
+      (scrolledIndexChange)="onScroll()"
     >
-      <table>
-        <thead>
-          <tr>
-            <th class="col-stat" (click)="toggleSort('label')">
-              Statistic
-              <span class="sort-arrow" [class.active]="isSortActive('label')">{{ sortIndicator('label') }}</span>
-            </th>
-            <th class="col-value" (click)="toggleSort('rawValue')">
-              Value
-              <span class="sort-arrow" [class.active]="isSortActive('rawValue')">{{ sortIndicator('rawValue') }}</span>
-            </th>
-            @if (showRanks()) {
-              <th class="col-rank" (click)="toggleSort('rank')">
-                Ranking
-                <span class="sort-arrow" [class.active]="isSortActive('rank')">{{ sortIndicator('rank') }}</span>
-              </th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          @for (stat of sortedStats(); track stat.statKey) {
-            <tr class="stat-row" (click)="statClicked.emit(stat)">
-              <td class="col-stat">
-                @if (itemSpriteStyle(stat); as style) {
-                  <span class="stat-icon" [ngStyle]="style"></span>
-                }
-                <span class="stat-label">{{ stat.label }}</span>
-              </td>
-              <td class="col-value">
-                <div class="value-cell">
-                  <div class="mini-bar-track">
-                    @if (stat.segments && stat.segments.length > 0) {
-                      <div class="mini-bar-fill-container" [style.width.%]="stat.percentage">
-                        @for (segment of stat.segments; track segment.label) {
-                          <div
-                            class="mini-bar-segment"
-                            [style.width.%]="segment.percentage"
-                            [style.background-color]="segment.color"
-                            [title]="segment.label + ': ' + segment.value"
-                          ></div>
-                        }
-                      </div>
-                    } @else {
-                      <div
-                        class="mini-bar-fill"
-                        [style.width.%]="stat.percentage"
-                        [style.background-color]="barColor()"
-                      ></div>
-                    }
-                  </div>
-                  <span class="value-text">{{ stat.displayValue }}@if (isHeartsStat(stat)) { <span class="heart-icon" [ngStyle]="heartStyle"></span>}@if (isBlocksStat(stat)) {<span class="unit-full"> blocks</span><span class="unit-short"> m</span>}</span>
-                </div>
-              </td>
-              @if (showRanks()) {
-                <td class="col-rank">
-                  @if (stat.rank) {
-                    <span
-                      class="rank-badge"
-                      [style.background-color]="rankColor(stat.rank)"
-                      [style.color]="rankTextColor(stat.rank)"
-                    >
-                      #{{ stat.rank }}
-                    </span>
-                  }
-                </td>
-              }
-            </tr>
+      <div
+        *cdkVirtualFor="let stat of sortedStats(); trackBy: trackByStatKey"
+        class="stat-row"
+        [class.with-rank]="showRanks()"
+        (click)="statClicked.emit(stat)"
+      >
+        <div class="col-stat">
+          @if (itemSpriteStyle(stat); as style) {
+            <span class="stat-icon" [ngStyle]="style"></span>
           }
-        </tbody>
-      </table>
-    </div>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+        <div class="col-bar">
+          <div class="mini-bar-track">
+            @if (stat.segments && stat.segments.length > 0) {
+              <div class="mini-bar-fill-container" [style.width.%]="stat.percentage">
+                @for (segment of stat.segments; track segment.label) {
+                  <div
+                    class="mini-bar-segment"
+                    [style.width.%]="segment.percentage"
+                    [style.background-color]="segment.color"
+                    [title]="segment.label + ': ' + segment.value"
+                  ></div>
+                }
+              </div>
+            } @else {
+              <div
+                class="mini-bar-fill"
+                [style.width.%]="stat.percentage"
+                [style.background-color]="barColor()"
+              ></div>
+            }
+          </div>
+        </div>
+        <div class="col-value">
+          <span class="value-text">{{ stat.displayValue }}@if (isHeartsStat(stat)) { <span class="heart-icon" [ngStyle]="heartStyle"></span>}@if (isBlocksStat(stat)) {<span class="unit-full"> blocks</span><span class="unit-short"> m</span>}</span>
+        </div>
+        @if (showRanks()) {
+          <div class="col-rank">
+            @if (stat.rank) {
+              <span
+                class="rank-badge"
+                [style.background-color]="rankColor(stat.rank)"
+                [style.color]="rankTextColor(stat.rank)"
+              >
+                #{{ stat.rank }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+    </cdk-virtual-scroll-viewport>
+
     @if (isScrollable()) {
       <div class="scroll-indicator bottom" [class.visible]="canScrollDown()"><img src="assets/buttons/chevron-down.svg" alt="" /></div>
     }

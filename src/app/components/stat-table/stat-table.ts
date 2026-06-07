@@ -1,5 +1,6 @@
-import { Component, input, output, signal, computed } from '@angular/core';
+import { Component, input, output, signal, computed, viewChild } from '@angular/core';
 import { NgStyle } from '@angular/common';
+import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
 import { DisplayStat } from '../../models/player-stats.model';
 import { statSpriteStyle, heartSpriteStyle } from '../../utils/sprite-utils';
 import { isDamageStat, isMovementStat } from '../../utils/stat-utils';
@@ -7,9 +8,15 @@ import { isDamageStat, isMovementStat } from '../../utils/stat-utils';
 type SortColumn = 'label' | 'rawValue' | 'rank';
 type SortDirection = 'asc' | 'desc';
 
+// Fixed row height (px) used by the virtual scroll strategy. Must match the
+// rendered height of .stat-row in stat-table.scss or scrolling will drift.
+const ROW_HEIGHT = 32;
+// Cap the viewport so long tables scroll instead of growing unbounded.
+const MAX_VIEWPORT_HEIGHT = 326;
+
 @Component({
   selector: 'app-stat-table',
-  imports: [NgStyle],
+  imports: [NgStyle, ScrollingModule],
   templateUrl: './stat-table.html',
   styleUrl: './stat-table.scss',
 })
@@ -22,6 +29,10 @@ export class StatTable {
 
   statClicked = output<DisplayStat>();
 
+  readonly rowHeight = ROW_HEIGHT;
+
+  private viewport = viewChild(CdkVirtualScrollViewport);
+
   sortColumn = signal<SortColumn>('rawValue');
   sortDirection = signal<SortDirection>('desc');
 
@@ -30,7 +41,15 @@ export class StatTable {
   canScrollUp = signal(false);
   canScrollDown = signal(true);
 
-  isScrollable = computed(() => this.scrollable() && this.sortedStats().length > 10);
+  // Height the rows would occupy if all rendered, capped at the max.
+  viewportHeight = computed(() =>
+    Math.min(this.sortedStats().length * ROW_HEIGHT, MAX_VIEWPORT_HEIGHT),
+  );
+
+  // Scrollable (and chevrons shown) only when content overflows the capped viewport.
+  isScrollable = computed(() => this.sortedStats().length * ROW_HEIGHT > MAX_VIEWPORT_HEIGHT);
+
+  trackByStatKey = (_: number, stat: DisplayStat): string => stat.statKey;
 
   sortedStats = computed(() => {
     const col = this.sortColumn();
@@ -90,10 +109,13 @@ export class StatTable {
     return rank === 2 ? '#1a1a1a' : '#fff';
   }
 
-  onScroll(event: Event): void {
-    const el = event.target as HTMLElement;
-    this.canScrollUp.set(el.scrollTop > 0);
-    this.canScrollDown.set(el.scrollTop + el.clientHeight < el.scrollHeight - 1);
+  onScroll(): void {
+    const vp = this.viewport();
+    if (!vp) {
+      return;
+    }
+    this.canScrollUp.set(vp.measureScrollOffset('top') > 1);
+    this.canScrollDown.set(vp.measureScrollOffset('bottom') > 1);
   }
 
   heartStyle = heartSpriteStyle();
